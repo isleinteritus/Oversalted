@@ -8,6 +8,8 @@ router.route('/commentId')
     .patch()
     .put()
 
+    //deletes a comment
+
 router.delete('/:commentId', async (req, res) => {
     try {
         const removedComment = Comment.remove({_id: req.params.commentId})
