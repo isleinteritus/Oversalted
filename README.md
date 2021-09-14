@@ -22,10 +22,11 @@
 
 > Branch: backendReconstruction Goals
 convert backend from OOP -> Functional to remove need for a ton of async/await and OOP design.
-    - Kill routes
-    - Kill Controllers
-    - Edit Models as needed
-    - other models(?)
+
+- Kill routes
+- Kill Controllers
+- Edit Models as needed
+- other models(?)
 
 ## Notes
 
