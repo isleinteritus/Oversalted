@@ -43,9 +43,10 @@ Page concept setups
 - catagorized
 - users [to be friends with each other]
 
-***
-
 > Incubators (open groups focused on their own topics)
+
+-
+-
 
 ***
 
