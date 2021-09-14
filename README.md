@@ -52,6 +52,5 @@ convert backend from OOP -> Functional to remove need for a ton of async/await a
     - questions
     - catagorized
     - users [to be friends with each other]
-Incubators (open groups focused on their own topics)
-
+> Incubators (open groups focused on their own topics)
 > vote system to decide to which is the most reccomended answer and have a top three displayed to show neutral judgement on appriopiate answers.tracks users vote per forum. Well fuck.
