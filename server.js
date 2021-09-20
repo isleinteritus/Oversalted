@@ -47,6 +47,7 @@ app.use(logger('dev'))
 app.use('/users', users)
 app.use('/forums', forums)
 app.use('./comments', comments)
+app.use('/tags', tags)
 
 //const forumsRoute = require('./routes/forums')
 //app.use('/forum', forumsRoute)
