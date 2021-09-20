@@ -1,5 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const TagsController = require('../controllers/tags')
+
+router.route()
+
+/*
 const Tag = require('../models/tag')
 
 //show all tags
@@ -86,3 +91,4 @@ router.get('/:tagId', async (req, res) => {
 })
 
 module.exports = router
+*/
