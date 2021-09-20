@@ -7,9 +7,19 @@ router.route('/commentId')
     .delete()
     .patch()
     .put()
+/*
 
-    //deletes a comment
+//show requested comment
+router.get('/:commentId', async (req, res) => {
+    try{
+        const comment = await Comment.findById(req.params.commentId)
+        res.json({message:comment})
+    }catch(error){
+        res.json({message: error})
+    }
+})
 
+//deletes a comment
 router.delete('/:commentId', async (req, res) => {
     try {
         const removedComment = Comment.remove({_id: req.params.commentId})
@@ -65,14 +75,5 @@ router.post('/', async (req, res) => {
 //     })
 // })
 
-//show requested comment
-router.get('/:commentId', async (req, res) => {
-    try{
-        const comment = await Comment.findById(req.params.commentId)
-        res.json({message:comment})
-    }catch(error){
-        res.json({message: error})
-    }
-})
-
+*/
 module.exports = router

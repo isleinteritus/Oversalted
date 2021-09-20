@@ -1,3 +1,4 @@
+//Later this will be ditched to be an auth path however for testing other routes this should work in its place.
 const User = require('../models/user')
 const Forum = require('../models/forum')
 const Comment = require('../models/comment')
