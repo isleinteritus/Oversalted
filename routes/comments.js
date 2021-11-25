@@ -1,3 +1,14 @@
+const Comment = require('../models/comment')
+const router = require('../routeController.js')({
+    //Now to figure out what goes here
+    Model: Comment,
+    ViewPath: 'comment',
+    Router: require('express').Router(),
+    booleanKey: ['tk']
+    })
+module.exports = router
+
+/* Old Code Blues. References, more or less
 const express = require('express')
 const router = express.Router()
 const CommentsController = require('../controllers/forums')
@@ -7,8 +18,6 @@ router.route('/commentId')
     .delete()
     .patch()
     .put()
-/*
-
 //show requested comment
 router.get('/:commentId', async (req, res) => {
     try{
@@ -76,4 +85,3 @@ router.post('/', async (req, res) => {
 // })
 
 */
-module.exports = router

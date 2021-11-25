@@ -20,6 +20,7 @@
 
 ## Todo
 
+=======
 
 ***
     -finish editing routes to convert to async/await.
@@ -40,7 +41,6 @@ convert backend from OOP -> Functional to remove need for a ton of async/await a
 ## Notes
 
 > The tag system: keywords are based on the search system. 1The goal is to have forums that have tags and are sorted by such. Users cannot add new tags however they can request one to be added.
-
 
 thoughts:
 

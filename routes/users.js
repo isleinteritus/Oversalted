@@ -1,3 +1,14 @@
+const User = require('../models/user')
+const router = require('../routeController.js')({
+    //Now to figure out what goes here
+    Model: User,
+    ViewPath: 'user',
+    Router: require('express').Router(),
+    booleanKey: ['tk']
+    })
+module.exports = router
+
+/*
 const express = require('express')
 const router = express.Router()
 usersController = require('../controllers/users')
@@ -19,3 +30,4 @@ router.route('/:userId/forums')
 //post user comments - maybe. Might go to some specific comment route or into forum route as its part of the forum then I can tie it to the commentors name and the forums idea.
 
 module.exports = router
+*/
