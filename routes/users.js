@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-
 usersController = require('../controllers/users')
 
 router.route('/')
@@ -12,7 +11,7 @@ router.route('/:userId')
     .put(usersController.putUser)
     .patch(usersController.patchUser)
     .delete(usersController.deleteUser)
-
+//move 15/16/17 to routes/forums
 router.route('/:userId/forums')
     .get(usersController.getUserForum)
     .post(usersController.newUserForum)
