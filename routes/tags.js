@@ -1,5 +1,20 @@
+const Tag = require('../models/tag')
+const router = require('../routeController.js')({
+    //Now to figure out what goes here
+    Model: Tag,
+    ViewPath: 'tag',
+    Router: require('express').Router(),
+    booleanKey: ['tk']
+    })
+module.exports = router
+
+/*
 const express = require('express')
 const router = express.Router()
+const TagsController = require('../controllers/tags')
+
+router.route()
+
 const Tag = require('../models/tag')
 
 //show all tags
@@ -86,3 +101,4 @@ router.get('/:tagId', async (req, res) => {
 })
 
 module.exports = router
+*/

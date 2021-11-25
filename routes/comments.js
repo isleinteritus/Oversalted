@@ -1,3 +1,14 @@
+const Comment = require('../models/comment')
+const router = require('../routeController.js')({
+    //Now to figure out what goes here
+    Model: Comment,
+    ViewPath: 'comment',
+    Router: require('express').Router(),
+    booleanKey: ['tk']
+    })
+module.exports = router
+
+/* Old Code Blues. References, more or less
 const express = require('express')
 const router = express.Router()
 const CommentsController = require('../controllers/forums')
@@ -7,9 +18,17 @@ router.route('/commentId')
     .delete()
     .patch()
     .put()
+//show requested comment
+router.get('/:commentId', async (req, res) => {
+    try{
+        const comment = await Comment.findById(req.params.commentId)
+        res.json({message:comment})
+    }catch(error){
+        res.json({message: error})
+    }
+})
 
-    //deletes a comment
-
+//deletes a comment
 router.delete('/:commentId', async (req, res) => {
     try {
         const removedComment = Comment.remove({_id: req.params.commentId})
@@ -65,14 +84,4 @@ router.post('/', async (req, res) => {
 //     })
 // })
 
-//show requested comment
-router.get('/:commentId', async (req, res) => {
-    try{
-        const comment = await Comment.findById(req.params.commentId)
-        res.json({message:comment})
-    }catch(error){
-        res.json({message: error})
-    }
-})
-
-module.exports = router
+*/
