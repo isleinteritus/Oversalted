@@ -46,7 +46,6 @@ app.use(logger('dev'))
 //routes
 app.use('/users', users)
 app.use('/forums', forums)
-app.use('/tags', tags)
 app.use('/comments', comments)
 
 

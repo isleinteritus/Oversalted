@@ -20,6 +20,16 @@
 
 ## Todo
 
+=======
+
+***
+    -finish editing routes to convert to async/await.
+    -Edit Models as needed
+    -other models(?)
+    -sort routes/files by the data they contain. Example would be to move "router.route('/:userId/forums')
+    .get(usersController.getUserForum)
+    .post(usersController.newUserForum)" from the users route and place it into the forums route.
+=======
 > Branch: backendReconstruction Goals
 convert backend from OOP -> Functional to remove need for a ton of async/await and OOP design.
 
