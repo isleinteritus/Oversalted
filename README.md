@@ -4,61 +4,39 @@
 
 > Oversalted is a website troubleshoot forum focused on creating a a world-based community enviroment to cater towards recipe developement, muilti-ended corrections, and experimentation in hypothetical food-cooking.
 
-## MVP GOALS
+## GOALS
 
 - User to make an account
-- Admin acct to god-like stuff like posting tag
-    +just keep it to only posting tags
+- Admin acct? Maybe. Note sure yet with this one as the only reasoning right now is to add new tags but there are other methods of doing so.
 - User submit Question
 - Review/edit question
 - Generalized tag list
 
 ## CURRENT Stretch Goals
 
-- Voting system that lets each user vote 1-3 times per forum
-- Feed that sorts by most recent or top three most voted
-
-## Todo
+- Voting system that lets each user vote 1-3 times per forum on valid answers. This does not stack.
+- Feed that sorts by top three best answer, then sorts the rest by timeline of posted
 
 =======
 
-***
-    -finish editing routes to convert to async/await.
-    -Edit Models as needed
-    -other models(?)
-    -sort routes/files by the data they contain. Example would be to move "router.route('/:userId/forums')
-    .get(usersController.getUserForum)
-    .post(usersController.newUserForum)" from the users route and place it into the forums route.
-=======
-> Branch: backendReconstruction Goals
-convert backend from OOP -> Functional to remove need for a ton of async/await and OOP design.
-
-- Kill routes
-- Kill Controllers
-- Edit Models as needed
-- other models(?)
 
 ## Notes
 
-> The tag system: keywords are based on the search system. 1The goal is to have forums that have tags and are sorted by such. Users cannot add new tags however they can request one to be added.
+> The tag system: keywords are based on the search system.
+1)The goal is to have forums that have tags and are sorted by such. Users cannot add new tags however they can request one to be added.
 
 thoughts:
 
 ***
 
-Page concept setups
+Pageview concept setups
 > Public
 
-- feed(pending)
+- [personalized]feed
 - questions
-- catagorized
+- catagories[tags]
 - users [to be friends with each other]
 
-> Incubators (open groups focused on their own topics)
-
--
--
+> Incubators (open groups focused on their own topics) Thinking something like a makers guild or potentially used for buisnesses to help staff
 
 ***
-
-> vote system to decide to which is the most reccomended answer and have a top three displayed to show neutral judgement on appriopiate answers.tracks users vote per forum. Well fuck.

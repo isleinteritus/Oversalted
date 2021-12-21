@@ -1,5 +1,5 @@
 ///=============\\\
-    Dependencies
+//  Dependencies \\
 ///=============\\\
 require('dotenv').config()
 const express = require ('express')
@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const cors = require('cors')
-const bodyParser= require('morgan')
+//const bodyParser= require('morgan')
 
 // Database and connections
 const MONGODB_URI = process.env.MONGODB_URI
@@ -27,33 +27,28 @@ db.on('disconnected', ()=> console.log('Your mongod has disconnected'))
 //open connection to mongod!
 db.on('open', ()=>{})
 
-//routes assigned
+//route assignment
 const users = require('./routes/users')
 const forums = require('./routes/forums')
 const comments = require('./routes/comments')
+const tags = require('./routes/tags')
 
 //middleware
 //turns off a deprication error with findByIdAndUpdate
-mongoose.set('useFindAndModify', false)
+//mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true}))
+//app.use(bodyParser.urlencoded({ extended: true}))
 //I don't think I need this since the above line is extended to true instead of false
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(logger('dev'))
+//app.use(logger('dev'))
 
 //routes
-app.use('/users', users)
-app.use('/forums', forums)
-app.use('/comments', comments)
-
-
-//const forumsRoute = require('./routes/forums')
-//app.use('/forum', forumsRoute)
-//
-//const commentsRoute = require('./routes/tags')
-//app.use("/tag", tagsRoute)
+app.use('/user', users)
+app.use('/forum', forums)
+app.use('/comment', comments)
+app.use('/tag', tags)
 
 //port
 app.listen(PORT, () => {

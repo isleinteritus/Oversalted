@@ -1,6 +1,5 @@
-module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedViewPath*/ }) {
-    //pluralizes the word in path
-    //const plural = pluralizedViewPath || ViewPath.toLowerCase() +'s'
+module.exports = function({Model, ViewPath, Router, booleanKey}) {
+
 
     //ROUTES
     ///////INDEX///////
@@ -8,8 +7,8 @@ module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedView
         //finds all models within Model
         Model.find({}, (error, allModels) => {
             if(allModels){
-                //renders the pat to index
-                res.render(`${ViewPath}/Index`, {
+                //sends the pat to index
+                res.send(`${ViewPath}/Index`, {
                     [ViewPath]: allModels
                 })
             }else{
@@ -20,7 +19,7 @@ module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedView
 
     //NEW
     Router.get('/new', (req, res) => {
-        res.render(`${ViewPath}/New`)
+        res.send(`${ViewPath}/New`)
     })
 
     //DELETE
@@ -58,8 +57,7 @@ module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedView
                 } else {
                     console.log('update route:' + error.message)
                 }
-                //HACKEY AS FUCK BUT IT WORKS. The actual error is a file path issue with my dynamic server. I will have to figure it out later but as of right now this works.
-                res.redirect(`/${ViewPath}s`)
+                res.redirect(`/${ViewPath}`)
             }
         )
     })
@@ -83,8 +81,8 @@ module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedView
             if(error){
                 console.log('edit route:' + error.message)
             } else {
-            //renders the edit view and passes the found path
-                res.render(`${ViewPath}/Edit`, {
+            //sends the edit view and passes the found path
+                res.send(`${ViewPath}/Edit`, {
                     [ViewPath] :foundModel,
                 })
             }
@@ -99,8 +97,8 @@ module.exports = function({Model, ViewPath, Router, booleanKey, /*pluralizedView
                 console.log('show route:' + error.message)
                 // res.sendStatus(500) shoots off a false alarm
             } else {
-                //render the show route and pass it the foundModel
-                res.render(`${ViewPath}/Show`, {
+                //send the show route and pass it the foundModel
+                res.send(`${ViewPath}/Show`, {
                     [ViewPath]: foundModel,
                 })
             }

@@ -1,7 +1,7 @@
-const Tag = require('../models/tag')
-const router = require('../routeController.js')({
+const tag = require('../models/tag')
+const router = require('../controllers/userController.js')({
     //Now to figure out what goes here
-    Model: Tag,
+    Model: tag,
     ViewPath: 'tag',
     Router: require('express').Router(),
     booleanKey: ['tk']

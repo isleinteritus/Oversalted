@@ -6,9 +6,14 @@ const tagSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: true,
+            required: true
         },
-        _forum: [
+        //add a description field. type string & required true
+        description: {
+            type: String,
+            required: true
+        },
+        forum: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"

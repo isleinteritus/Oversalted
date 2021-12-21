@@ -16,24 +16,24 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        _forum: [
+        userForum: [ //use to be forum. Check any usage of forum in relation to userSchema
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"
             }
         ],
-        _userComment: [
+        userComment: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Comment"
             }
         ],
-        createdAt: {
+        createdOn: {
             type: Date,
             default: Date.now
         }
     }
 )
 
-const User = mongoose.Model('User', userSchema)
+const User = mongoose.model('User', userSchema)
 module.exports = User

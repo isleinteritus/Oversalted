@@ -11,28 +11,34 @@ const forumSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        _owner: {
+        //user to owner
+        forumOwner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
+            //maybe this one needs a unique value for only one owner
         },
-        _comment:[
+        //added a s to comment
+        comments:[
+            //I wonder if I need to add another object containing the users of each comment. commentOwner?
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Comment"
             }
         ],
-        _tag: [
+        //added a s
+        tags: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Tag"
             }
         ],
-        createdAt: {
+        //changed createdAt to createdOn. Makes more linguistic sense for readability
+        createdOn: {
             type: Date,
             default: Date.now
         }
     }
 )
 
-const Forum = mongoose.Model('Forum', forumSchema)
+const Forum = mongoose.model('Forum', forumSchema)
 module.exports = Forum

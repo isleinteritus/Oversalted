@@ -1,7 +1,7 @@
-const Comment = require('../models/comment')
-const router = require('../routeController.js')({
+const comment = require('../models/comment')
+const router = require('../controllers/userController.js')({
     //Now to figure out what goes here
-    Model: Comment,
+    Model: comment,
     ViewPath: 'comment',
     Router: require('express').Router(),
     booleanKey: ['tk']
