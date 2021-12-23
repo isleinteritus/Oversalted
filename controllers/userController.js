@@ -53,6 +53,7 @@ module.exports = function({Model, ViewPath, Router, BooleanKey}) {
 
     ///////CREATE///////
     Router.post ('/', async (req, res) => {
+        //How to handle the logic here? If true do the try catch block. If false return "you do not have permission to create this post"
         BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false //if false I think it should return an error that use does not have permission.
         })
@@ -65,7 +66,9 @@ module.exports = function({Model, ViewPath, Router, BooleanKey}) {
     })
     ///////EDIT///////
     Router.get('/id/edit', async (req, res) => {
-        //Needs a boolean permission
+        //placeholder for logic in mind. Basically aiming to check if user owns post and if they don't, well, they can't.
+        BooleanKey.forEach((key) => {
+            req.body[key] = req.body[key] === 'on' ? true : false
         try {
             //retrieves the id then sends a version that is editable
             Model.findById(req.params.id)
