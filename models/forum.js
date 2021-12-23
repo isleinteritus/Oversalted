@@ -11,13 +11,12 @@ const forumSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        //user to owner
-        forumOwner: {
+        forumOwner: [
+            {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-            //maybe this one needs a unique value for only one owner
-        },
-        //added a s to comment
+            }//maybe this one needs a unique value for only one owner
+        ],
         comments:[
             //I wonder if I need to add another object containing the users of each comment. commentOwner?
             {
@@ -25,7 +24,6 @@ const forumSchema = new mongoose.Schema(
                 ref: "Comment"
             }
         ],
-        //added a s
         tags: [
             {
                 type: mongoose.Schema.Types.ObjectId,

@@ -12,6 +12,10 @@ const commentSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
+        forum: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Forum"
+        }
         createdOn: {
             type: Date,
             default: Date.now

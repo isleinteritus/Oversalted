@@ -1,4 +1,4 @@
-module.exports = function({Model, ViewPath, Router, booleanKey}) {
+module.exports = function({Model, ViewPath, Router, BooleanKey}) {
 
 
     //ROUTES
@@ -37,7 +37,7 @@ module.exports = function({Model, ViewPath, Router, booleanKey}) {
 
     //UPDATE
     Router.put ('/:id', (req, res) => {
-        booleanKey.forEach((key) => {
+        BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false
         })
         //update the current document with the model
@@ -64,7 +64,7 @@ module.exports = function({Model, ViewPath, Router, booleanKey}) {
 
     ///////CREATE///////
     Router.post('/', (req, res) => {
-        booleanKey.forEach((key) => {
+        BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false
         })
         //Creates the Model for t
