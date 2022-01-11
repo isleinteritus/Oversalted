@@ -1,35 +1,36 @@
+const express = require('express')
+const router = express.Router()
 
-module.exports = function({Model, ViewPath, Router, BooleanKey}) {
+
     //ROUTES
     ///////INDEX///////
-    Router.get('/', async (req, res)=> {
+    router.get('/index', async (req, res)=> {
         try{
             //retrieves index of requested Model
             Model.find({})//Should this pull all from database or limit query? Could frontend handle that?
-            res.send(`${ViewPath}/Index`)
+            res.send({message: 'success of something'})
         }catch(error){
             res.send({message: error})
         }
     })
     //NEW
-    //creates the endpoint of taking a file path and inputting it before /new. Depending on what user does defines the returned route.
-    Router.get('/new', (req, res) => {
-        res.send(`${ViewPath}/New`)
+    router.get('/New', (req, res) => {
+        res.send({message: 'success of something'})
     })
 
     //DELETE
-    Router.delete('/:id', async (req,res) => {
+    router.delete('/:id', async (req,res) => {
         try {
             //finds the model id and removes it from the collection
             Model.findByIdAndRemove(req.params.id)
-            res.send(`/${ViewPath}`)
+            res.send({message: 'success of something'})
         } catch (error) {
             res.send({message: error})
         }
     })
 
     //UPDATE
-    Router.put('/:id', async (req,res) => {
+    router.put('/:id', async (req,res) => {
         BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false
         })
@@ -45,48 +46,49 @@ module.exports = function({Model, ViewPath, Router, BooleanKey}) {
                 {
                     new : true
                 })
-                res.send(`/${ViewPath}/:id`)
+                res.send({message: 'success of something'})
         } catch (error) {
             res.send({message: error})
         }
     })
 
     ///////CREATE///////
-    Router.post ('/', async (req, res) => {
+    router.post ('/', async (req, res) => {
         //How to handle the logic here? If true do the try catch block. If false return "you do not have permission to create this post"
         BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false //if false I think it should return an error that use does not have permission.
         })
         try {
             Model.create(req.body)
-            res.send(`/${ViewPath}`)
+            res.send({message: 'success of something'})
         } catch (error) {
             res.send({message: error})
         }
     })
     ///////EDIT///////
-    Router.get('/id/edit', async (req, res) => {
+    router.get('/:id/Edit', async (req, res) => {
         //placeholder for logic in mind. Basically aiming to check if user owns post and if they don't, well, they can't.
         BooleanKey.forEach((key) => {
             req.body[key] = req.body[key] === 'on' ? true : false
+        })
         try {
             //retrieves the id then sends a version that is editable
             Model.findById(req.params.id)
-            res.send(`${ViewPath}/Edit`)
+            res.send({message: 'success of something'})
         } catch (error) {
             res.send({message: error})
         }
     })
 
     ///////SHOW///////
-    Router.get('/:id', async (req, res) => {
+    router.get('/:id', async (req, res) => {
         try {
             //finds specific id and shows it to user
             Model.findById(req.params.id)
-            res.send(`${ViewPath}/Show`)
+            res.send({message: 'success of something'})
         } catch (error) {
             res.send({message : error})
         }
     })
-    return Router
-}
+
+    module.exports = router

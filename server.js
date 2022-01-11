@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const cors = require('cors')
-//const bodyParser= require('morgan')
+const logger = require('morgan')
 
 // Database and connections
 const MONGODB_URI = process.env.MONGODB_URI
@@ -27,28 +27,27 @@ db.on('disconnected', ()=> console.log('Your mongod has disconnected'))
 //open connection to mongod!
 db.on('open', ()=>{})
 
-//route assignment
-const users = require('./routes/users')
-const forums = require('./routes/forums')
-const comments = require('./routes/comments')
-const tags = require('./routes/tags')
-
 //middleware
 //turns off a deprication error with findByIdAndUpdate
 //mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.use(express.json())
-//app.use(bodyParser.urlencoded({ extended: true}))
+app.use(express.urlencoded({ extended: true}))
 //I don't think I need this since the above line is extended to true instead of false
-//app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-//app.use(logger('dev'))
+app.use(logger('dev'))
+
+//controller assignment
+const usersController = require('./controllers/users.js')
+const tagsController = require('./controllers/tags.js')
+const forumsController = require('./controllers/forums.js')
+const commentsController = require('./controllers/comments.js')
 
 //routes
-app.use('/user', users)
-app.use('/forum', forums)
-app.use('/comment', comments)
-app.use('/tag', tags)
+app.use('/user', usersController)
+app.use('/forum', forumsController)
+app.use('/comment', commentsController)
+app.use('/tag', tagsController)
 
 //port
 app.listen(PORT, () => {
