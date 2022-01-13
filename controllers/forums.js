@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-
+const User = require('../models/user.js')
+const Forum = require('../models/forum.js')
 
     //ROUTES
     ///////INDEX///////
