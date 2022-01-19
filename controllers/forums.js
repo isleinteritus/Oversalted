@@ -8,7 +8,7 @@ const Comment = require('../models/comment.js')
 ///////CREATE///////
 router.post ('/create', (req, res) => {
     const findUser = User.findById({
-        _id: req.params.id
+        _id: req.body._id
     }, (error, foundUser) => {
             if (error) {
                 console.error(error)
@@ -16,15 +16,16 @@ router.post ('/create', (req, res) => {
         })
     Forum.create({
         title: req.body.title,
-        body: req.body.body,
-        forumOwner:req.params.id
+        content: req.body.content,
+        forumOwner:req.body._id
     }, (error, createdForum) => {
         if (error) {
             console.error(error)
         } else {
+            //change findUser to be User.findByIdAndUpdate. Then remove the full variable usage
             findUser.updateOne({
                 $push: {
-                    userForum: createdForum.id
+                    userForum: createdForum._id
                 }
             }, (error, updatedUserForum) => {
                     if (error) {
@@ -50,7 +51,7 @@ router.get('/index', (req, res)=> {
 ///////SHOW///////
 router.get('/:id', (req, res) => {
     Forum.findById({
-        _id: req.params.id
+        _id: req.params._id
     }, (error, foundForum) => {
         if (error) {
             console.error(error)
@@ -63,7 +64,7 @@ router.get('/:id', (req, res) => {
 //UPDATE
 router.put('/:id', (req,res) => {
     Forum.findByIdAndUpdate({
-        _id: req.params.id
+        _id: req.params._id
     },
     {
         ...req.body
@@ -82,7 +83,7 @@ router.put('/:id', (req,res) => {
 //DELETE
 router.delete('/:id', (req,res) => {
     Forum.findByIdAndDelete({
-        _id: req.params.id
+        _id: req.params._id
     }, (error, deletedForum) => {
         if (error) {
             console.error(error)

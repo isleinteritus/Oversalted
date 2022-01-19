@@ -45,7 +45,7 @@ router.get('/index', (req, res)=> {
 router.get('/:id', (req, res) => {
         //finds specific id and shows it to user
         User.findById({
-            _id: req.params.id
+            _id: req.params._id
         }, (error, foundUser) => {
             if (error) {
                 console.error(error)
@@ -58,7 +58,7 @@ router.get('/:id', (req, res) => {
 //UPDATE
 router.put('/:id', (req, res) => {
         User.findByIdAndUpdate({
-            _id: req.params.id
+            _id: req.params._id
         },
         {
             ...req.body
@@ -79,7 +79,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req,res) => {
         //finds the User id and removes it from the collection
         User.findByIdAndRemove({
-            _id: req.params.id
+            _id: req.params._id
         }, (error, deletedUser) => {
             if (error) {
                 console.error(error)
