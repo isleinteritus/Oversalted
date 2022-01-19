@@ -15,7 +15,7 @@ const forumSchema = new mongoose.Schema(
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-            }//maybe this one needs a unique value for only one owner
+            }
         ],
         comments:[
             //I wonder if I need to add another object containing the users of each comment. commentOwner?

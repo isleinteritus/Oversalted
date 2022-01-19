@@ -2,94 +2,94 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
+const Comment = require('../models/comment.js')
 
-    //ROUTES
-    ///////INDEX///////
-    router.get('/index', async (req, res)=> {
-        try{
-            //retrieves index of requested Model
-            Model.find({})//Should this pull all from database or limit query? Could frontend handle that?
-            res.send({message: 'success of something'})
-        }catch(error){
-            res.send({message: error})
-        }
-    })
-    //NEW
-    router.get('/New', (req, res) => {
-        res.send({message: 'success of something'})
-    })
-
-    //DELETE
-    router.delete('/:id', async (req,res) => {
-        try {
-            //finds the model id and removes it from the collection
-            Model.findByIdAndRemove(req.params.id)
-            res.send({message: 'success of something'})
-        } catch (error) {
-            res.send({message: error})
-        }
-    })
-
-    //UPDATE
-    router.put('/:id', async (req,res) => {
-        BooleanKey.forEach((key) => {
-            req.body[key] = req.body[key] === 'on' ? true : false
+//ROUTES
+///////CREATE///////
+router.post ('/create', (req, res) => {
+    const findUser = User.findById({
+        _id: req.params.id
+    }, (error, foundUser) => {
+            if (error) {
+                console.error(error)
+            }
         })
-        try {
-            //updates the document with the new information
-            Model.findByIdAndUpdate(
-                {
-                    _id:req.params.id
-                },
-                {
-                    ...req.body
-                },
-                {
-                    new : true
-                })
-                res.send({message: 'success of something'})
-        } catch (error) {
-            res.send({message: error})
+    Forum.create({
+        title: req.body.title,
+        body: req.body.body,
+        forumOwner:req.params.id
+    }, (error, createdForum) => {
+        if (error) {
+            console.error(error)
+        } else {
+            findUser.updateOne({
+                $push: {
+                    userForum: createdForum.id
+                }
+            }, (error, updatedUserForum) => {
+                    if (error) {
+                        console.error(error)
+                    }
+            })
+            res.json(createdForum)
         }
     })
+})
+///////INDEX///////
+router.get('/index', (req, res)=> {
+    Forum.find({
+    }, (error, foundForums) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.json(foundForums)
+        }
+    })
+})
 
-    ///////CREATE///////
-    router.post ('/', async (req, res) => {
-        //How to handle the logic here? If true do the try catch block. If false return "you do not have permission to create this post"
-        BooleanKey.forEach((key) => {
-            req.body[key] = req.body[key] === 'on' ? true : false //if false I think it should return an error that use does not have permission.
-        })
-        try {
-            Model.create(req.body)
-            res.send({message: 'success of something'})
-        } catch (error) {
-            res.send({message: error})
+///////SHOW///////
+router.get('/:id', (req, res) => {
+    Forum.findById({
+        _id: req.params.id
+    }, (error, foundForum) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.json(foundForum)
         }
     })
-    ///////EDIT///////
-    router.get('/:id/Edit', async (req, res) => {
-        //placeholder for logic in mind. Basically aiming to check if user owns post and if they don't, well, they can't.
-        BooleanKey.forEach((key) => {
-            req.body[key] = req.body[key] === 'on' ? true : false
-        })
-        try {
-            //retrieves the id then sends a version that is editable
-            Model.findById(req.params.id)
-            res.send({message: 'success of something'})
-        } catch (error) {
-            res.send({message: error})
-        }
-    })
+})
 
-    ///////SHOW///////
-    router.get('/:id', async (req, res) => {
-        try {
-            //finds specific id and shows it to user
-            Model.findById(req.params.id)
-            res.send({message: 'success of something'})
-        } catch (error) {
-            res.send({message : error})
+//UPDATE
+router.put('/:id', (req,res) => {
+    Forum.findByIdAndUpdate({
+        _id: req.params.id
+    },
+    {
+        ...req.body
+    },
+    {
+        new: true
+    }, (error, updatedForum) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.json(updatedForum)
         }
     })
+})
 
-    module.exports = router
+//DELETE
+router.delete('/:id', (req,res) => {
+    Forum.findByIdAndDelete({
+        _id: req.params.id
+    }, (error, deletedForum) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.json(deletedForum)
+        }
+    })
+})
+
+module.exports = router

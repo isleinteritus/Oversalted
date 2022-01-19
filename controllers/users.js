@@ -14,6 +14,7 @@ router.post('/signup', (req, res) => {
             }
         })
 })
+
 router.post('/login', (req, res) =>{
         User.findOne({
             email: req.body.email,
@@ -26,6 +27,7 @@ router.post('/login', (req, res) =>{
             }
         })
 })
+
 ///////INDEX///////
 router.get('/index', (req, res)=> {
         //retrieves index of requested User
@@ -38,6 +40,7 @@ router.get('/index', (req, res)=> {
             }
         })//Should this pull all from database or limit query? find all from back end and only send back what the frontend sends abstract names:'page' 'skip'
 })
+
 ///////SHOW///////
 router.get('/:id', (req, res) => {
         //finds specific id and shows it to user
@@ -51,6 +54,7 @@ router.get('/:id', (req, res) => {
             }
         })
 })
+
 //UPDATE
 router.put('/:id', (req, res) => {
         //updates the document with the new information
@@ -70,6 +74,7 @@ router.put('/:id', (req, res) => {
             }
         })
 })
+
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 router.delete('/:id', (req,res) => {
@@ -84,4 +89,5 @@ router.delete('/:id', (req,res) => {
             }
         })
 })
+
 module.exports = router
