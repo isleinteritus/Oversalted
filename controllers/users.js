@@ -57,11 +57,10 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 router.put('/:id', (req, res) => {
-        //updates the document with the new information
         User.findByIdAndUpdate({
             _id: req.params.id
         },
-        { //which information should go here?
+        {
             ...req.body
         },
         {

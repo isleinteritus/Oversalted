@@ -8,7 +8,6 @@ const tagSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        //add a description field. type string & required true
         description: {
             type: String,
             required: true

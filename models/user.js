@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        userForum: [ //use to be forum. Check any usage of forum in relation to userSchema
+        userForum: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"
