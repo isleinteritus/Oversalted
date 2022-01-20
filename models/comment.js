@@ -14,7 +14,7 @@ const commentSchema = new mongoose.Schema(
             ref: "User"
            }
         ],
-        forum: [
+        parentForum: [
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Forum"

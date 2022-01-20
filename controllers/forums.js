@@ -11,7 +11,6 @@ router.post ('/create', (req, res) => {
         if (error) {
             console.error(error)
         } else {
-            //change findUser to be User.findByIdAndUpdate. Then remove the full variable usage
             User.findByIdAndUpdate(createdForum.forumOwner, {
                 $push: {
                     userForum: createdForum.id
@@ -37,6 +36,7 @@ router.get('/index', (req, res)=> {
 })
 
 ///////SHOW///////
+//forum id
 router.get('/:id', (req, res) => {
     Forum.findById(req.params.id, (error, foundForum) => {
         if (error) {
@@ -48,31 +48,29 @@ router.get('/:id', (req, res) => {
 })
 
 //UPDATE
+//forum id
 router.put('/:id', (req,res) => {
-    Forum.findByIdAndUpdate({
-        _id: req.params.id
-    },
+    Forum.findByIdAndUpdate(
+        req.params.id,
     {
         ...req.body
-    },
-    {
-        new: true
     }, (error, updatedForum) => {
         if (error) {
             console.error(error)
         } else {
-            res.json(updatedForum)
+            res.json({message:"successful"})
         }
     })
 })
 
 //DELETE
+//forum id
 router.delete('/:id', (req,res) => {
     Forum.findByIdAndDelete(req.params.id, (error, deletedForum) => {
         if (error) {
             console.error(error)
         } else {
-            res.json(deletedForum)
+            res.json({message: "Forum Deleted"})
         }
     })
 })

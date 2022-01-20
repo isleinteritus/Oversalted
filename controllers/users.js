@@ -30,7 +30,6 @@ router.post('/login', (req, res) =>{
 
 ///////INDEX///////
 router.get('/index', (req, res)=> {
-        //retrieves index of requested User
         User.find({
         }, (error, foundUsers) => {
             if (error) {
@@ -38,10 +37,11 @@ router.get('/index', (req, res)=> {
             } else {
                 res.json(foundUsers)
             }
-        })//Should this pull all from database or limit query? find all from back end and only send back what the frontend sends abstract names:'page' 'skip'
+        })
 })
 
 ///////SHOW///////
+//user id
 router.get('/:id', (req, res) => {
         //finds specific id and shows it to user
         User.findById(
@@ -56,15 +56,13 @@ router.get('/:id', (req, res) => {
 })
 
 //UPDATE
+//user id
 router.put('/:id', (req, res) => {
-        User.findByIdAndUpdate({
-            _id: req.params.id
-        },
+        User.findByIdAndUpdate(
+            req.params.id
+        ,
         {
             ...req.body
-        },
-        {
-            new: true
         }, (error, updatedUser) => {
             if (error) {
                 console.error(error)
@@ -76,6 +74,7 @@ router.put('/:id', (req, res) => {
 
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
+//user ID
 router.delete('/:id', (req, res) => {
         //finds the User id and removes it from the collection
         User.findByIdAndRemove(
@@ -84,7 +83,7 @@ router.delete('/:id', (req, res) => {
             if (error) {
                 console.error(error)
             } else {
-                res.json(deletedUser)
+                res.json(del{message: "deleted user")
             }
         })
 })

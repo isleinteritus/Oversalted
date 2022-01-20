@@ -7,51 +7,88 @@ const Comment = require('../models/comment.js')
 //ROUTES
 ///////CREATE///////
 router.post ('/create', (req, res) => {
-    Comment.create({
-        content: req.body.content,
-        commentOwner: req.body._id,
-        forum: req.body._id
-    }, (error, createdComment) => {
+    Comment.create(req.body, (error, createdComment) => {
         if (error) {
             console.error(error)
         } else {
-            //findUser $push
-            //findForum $push
+            User.findByIdAndUpdate(createdComment.commentOwner, {
+                $push: {
+                    userComment: createdComment.id
+                }
+            }, (error, updatedUserComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            Forum.findByIdAndUpdate(createdComment.parentForum, {
+                $push: {
+                    comments: createdComment.id
+                }
+            }, (error, updatedForumComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
             res.json(createdComment)
         }
     })
-    //comment takes in data
-    //input username in else statement
-    //input forum ID in else statement of the comment function NOT the username else statement
-    //res.json(someComment)
 })
 ///////INDEX///////
-router.get('/index', (req, res)=> {
-    //grabs the selected forum ID
-    //grab all comments (body and username) linked to forum ID
-    //
-})
-
-///////SHOW///////
-router.get('/:id', (req, res) => {
-    //grabs forum ID and renders all comments on selected forum
+//forum ID
+router.get('/:id', (req, res)=> {
+    Comment.find({parentForum: req.params.id}, (error, foundComments) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.json(foundComments)
+        }
+    })
 })
 
 //UPDATE
+//comment id
 router.put('/:id', (req, res) => {
-    //grabs comment id
-    //updates info
+    Comment.findByIdAndUpdate(
+        req.params.id, 
+        {
+            ...req.body
+        }, (error, updatedComment) => {
+            if (error) {
+                console.error(error)
+            } else {
+                res.json({message:"successful"})
+            }
+        })
 })
 
 //DELETE
+//comment id
 router.delete('/:id', (req,res) => {
-    //finds the comment id
-    //grab the forum
-    //find the user
-    //remove the forum from the comment
-    //remove the user
-    //remove the comment
-
+    Comment.findByIdAndDelete(req.params.id, (error, deletedComment) => {
+        if (error) {
+            console.error(error)
+        } else {
+            User.findByIdAndUpdate(deletedComment.commentOwner, {
+                $pull: {
+                    userComment: deletedComment.id
+                }
+            }, (error, updatedUserComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            Forum.findByIdAndUpdate(deletedComment.parentForum, {
+                $pull: {
+                    comments: deletedComment.id
+                }
+            }, (error, updatedForumComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            res.json({message: "Comment deleted"})
+        }
+    })
 })
 
 module.exports = router
