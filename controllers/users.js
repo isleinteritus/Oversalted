@@ -83,7 +83,7 @@ router.delete('/:id', (req, res) => {
             if (error) {
                 console.error(error)
             } else {
-                res.json(del{message: "deleted user")
+                res.json({message: "deleted user"})
             }
         })
 })
