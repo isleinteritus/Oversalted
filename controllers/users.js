@@ -44,9 +44,9 @@ router.get('/index', (req, res)=> {
 ///////SHOW///////
 router.get('/:id', (req, res) => {
         //finds specific id and shows it to user
-        User.findById({
-            _id: req.params._id
-        }, (error, foundUser) => {
+        User.findById(
+            req.params.id, 
+            (error, foundUser) => {
             if (error) {
                 console.error(error)
             } else {
@@ -58,7 +58,7 @@ router.get('/:id', (req, res) => {
 //UPDATE
 router.put('/:id', (req, res) => {
         User.findByIdAndUpdate({
-            _id: req.params._id
+            _id: req.params.id
         },
         {
             ...req.body
@@ -76,11 +76,11 @@ router.put('/:id', (req, res) => {
 
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
-router.delete('/:id', (req,res) => {
+router.delete('/:id', (req, res) => {
         //finds the User id and removes it from the collection
-        User.findByIdAndRemove({
-            _id: req.params._id
-        }, (error, deletedUser) => {
+        User.findByIdAndRemove(
+            req.params.id,
+            (error, deletedUser) => {
             if (error) {
                 console.error(error)
             } else {
