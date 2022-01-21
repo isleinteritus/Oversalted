@@ -64,7 +64,9 @@ router.put('/:id', (req, res) => {
 //DELETE
 //comment id
 router.delete('/:id', (req,res) => {
-    Comment.findByIdAndDelete(req.params.id, (error, deletedComment) => {
+    Comment.findByIdAndDelete(
+        req.params.id, 
+        (error, deletedComment) => {
         if (error) {
             console.error(error)
         } else {

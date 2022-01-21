@@ -1,9 +1,8 @@
 //not sure what to with this yet. As of right now - it doesn't exist. Focus on forums an comments firstly.
 const express = require('express')
 const router = express.Router()
-const User = require('../models/user.js')
 const Tag = require('../models/tag.js')
-
+const Forum = require('../models/forum.js')
 
 //ROUTES
 ///////CREATE///////
@@ -16,6 +15,7 @@ router.post ('/create', (req, res) => {
         }
     })
 })
+
 ///////INDEX///////
 router.get('/index', (req, res)=> {
     Tag.find((error, foundTags) => {
@@ -41,6 +41,7 @@ router.get('/:id', (req, res) => {
                 }
             })
 })
+
 //UPDATE
 //tag id
 router.put('/:id', (req, res) => {
@@ -56,15 +57,21 @@ router.put('/:id', (req, res) => {
         }
     })
 })
+
 //DO NOT UNCOMMENT THIS. (╯°Д°)╯︵/(.□ . \)
 router.delete('/:id', (req, res) => {
     //finds the User id and removes it from the collection
-    Tag.findByIdAndRemove(
+    Tag.findByIdAndDelete(
         req.params.id,
-        (error, deletedTag) => {
+        (error, deletedTags) => {
         if (error) {
             console.error(error)
         } else {
+            Forum.findByIdAndUpdate(deletedTags.taggedForum, {
+                $pull: {
+                    tags: deletedTags.id
+                }
+            })
             res.json({message: "WHY DID YOU DELETE THIS"})
         }
     })

@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
-
+const Forum = require('../models/forum.js')
+const Comment = require('../models/comment.js')
 //ROUTES
 ///////CREATE (signup)///////
 router.post('/signup', (req, res) => {
@@ -82,6 +83,24 @@ router.delete('/:id', (req, res) => {
         if (error) {
             console.error(error)
         } else {
+            Forum.findByIdAndUpdate(deletedUser.forumOwner, {
+                $pull: {
+                    userForum: deletedUser.id
+                }
+            }, (error, deletedForum) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            Comment.findByIdAndUpdate(deletedUser.userComment, {
+                $pull: {
+                    commentOwner: deletedComment.id
+                }
+            }, (error, deletedComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
             res.json({message: "deleted user"})
         }
     })

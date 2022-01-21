@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
+const Tag = require('../models/tag.js')
 
 //ROUTES
 ///////CREATE///////
@@ -16,10 +17,19 @@ router.post ('/create', (req, res) => {
                     userForum: createdForum.id
                 }
             }, (error, updatedUserForum) => {
-                    if (error) {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            Tag.findByIdAndUpdate(createdForum.tags, {
+                $push: {
+                    taggedForum: createdForum.id
+                }
+            }, (error, updatedForumTags) => {
+                if (error) {
                         console.error(error)
                     }
-            })
+                })
             res.json(createdForum)
         }
     })
@@ -70,6 +80,25 @@ router.delete('/:id', (req,res) => {
         if (error) {
             console.error(error)
         } else {
+            User.findByIdAndUpdate(deletedForum.forumOwner, {
+                $pull: {
+                    userForum: deletedForum.id
+                }
+            }, (error, deletedUserForum) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+            //making note to check on this specifically. Not sure if it will delete all comments once forum is removed.
+            Comment.findByIdAndUpate(deletedComment.userComment, {
+                $pull: {
+                    comments: deletedComment.id
+                }
+            }, (error, updatedForumComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
             res.json({message: "Forum Deleted"})
         }
     })
