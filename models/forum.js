@@ -23,7 +23,7 @@ const forumSchema = new mongoose.Schema(
                 ref: "Comment"
             }
         ],
-        tags: [
+        parentTags: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Tag"

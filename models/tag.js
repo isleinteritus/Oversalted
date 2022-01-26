@@ -12,7 +12,7 @@ const tagSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        taggedForum: [
+        taggedForums: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"

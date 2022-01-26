@@ -14,16 +14,17 @@ router.post ('/create', (req, res) => {
         } else {
             User.findByIdAndUpdate(createdForum.forumOwner, {
                 $push: {
-                    userForum: createdForum.id
+                    userForums: createdForum.id
                 }
             }, (error, updatedUserForum) => {
                 if (error) {
                     console.error(error)
                 }
             })
-            Tag.findByIdAndUpdate(createdForum.tags, {
+            //need a for each loop to add each forum to the correct tag, else only one is added
+            Tag.findByIdAndUpdate(createdForum.parentTags, {
                 $push: {
-                    taggedForum: createdForum.id
+                    taggedForums: createdForum.id
                 }
             }, (error, updatedForumTags) => {
                 if (error) {
@@ -73,32 +74,61 @@ router.put('/:id', (req,res) => {
     })
 })
 
-//DELETE
+//DELETE (╯°Д°)╯︵/(.□ . \)
 //forum id
 router.delete('/:id', (req,res) => {
-    Forum.findByIdAndDelete(req.params.id, (error, deletedForum) => {
+    Forum.findByIdAndDelete(
+        req.params.id,
+        (error, deletedForum) => {
         if (error) {
             console.error(error)
         } else {
-            User.findByIdAndUpdate(deletedForum.forumOwner, {
+
+            User.updateMany({}, {
                 $pull: {
-                    userForum: deletedForum.id
+                    userForums: {
+                        $in: deletedForum._id
+                    }
                 }
-            }, (error, deletedUserForum) => {
+            }, (error, updatedUser) => {
                 if (error) {
                     console.error(error)
                 }
             })
-            //making note to check on this specifically. Not sure if it will delete all comments once forum is removed.
-            Comment.findByIdAndUpate(deletedComment.userComment, {
+
+            User.updateMany({}, {
                 $pull: {
-                    comments: deletedComment.id
+                    userComments: {
+                        $in: deletedForum.comments
+                    }
                 }
-            }, (error, updatedForumComment) => {
+            }, (error, updatedUser) => {
                 if (error) {
                     console.error(error)
                 }
             })
+
+            Comment.deleteMany({
+                _id: {
+                    $in: deletedForum.comments
+                }
+            }, (error, deletedComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+
+            Tag.updateMany({}, {
+                $pull: {
+                    taggedForums: {
+                        $in: deletedForum._id
+                    }
+                }
+        }, (error, updatedTag) => {
+            if (error) {
+                console.error(error)
+            }
+        })
             res.json({message: "Forum Deleted"})
         }
     })

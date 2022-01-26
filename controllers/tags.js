@@ -57,23 +57,4 @@ router.put('/:id', (req, res) => {
         }
     })
 })
-
-//DO NOT UNCOMMENT THIS. (╯°Д°)╯︵/(.□ . \)
-router.delete('/:id', (req, res) => {
-    //finds the User id and removes it from the collection
-    Tag.findByIdAndDelete(
-        req.params.id,
-        (error, deletedTags) => {
-        if (error) {
-            console.error(error)
-        } else {
-            Forum.findByIdAndUpdate(deletedTags.taggedForum, {
-                $pull: {
-                    tags: deletedTags.id
-                }
-            })
-            res.json({message: "WHY DID YOU DELETE THIS"})
-        }
-    })
-})
 module.exports = router

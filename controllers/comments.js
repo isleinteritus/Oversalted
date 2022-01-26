@@ -13,7 +13,7 @@ router.post ('/create', (req, res) => {
         } else {
             User.findByIdAndUpdate(createdComment.commentOwner, {
                 $push: {
-                    userComment: createdComment.id
+                    userComments: createdComment.id
                 }
             }, (error, updatedUserComment) => {
                 if (error) {
@@ -70,18 +70,22 @@ router.delete('/:id', (req,res) => {
         if (error) {
             console.error(error)
         } else {
-            User.findByIdAndUpdate(deletedComment.commentOwner, {
+            User.updateOne({}, {
                 $pull: {
-                    userComment: deletedComment.id
+                    userComments: {
+                        $in: deletedComment._id
+                    }
                 }
             }, (error, updatedUserComment) => {
                 if (error) {
                     console.error(error)
                 }
             })
-            Forum.findByIdAndUpdate(deletedComment.parentForum, {
+            Forum.updateOne({}, {
                 $pull: {
-                    comments: deletedComment.id
+                    comments: {
+                        $in: deletedComment._id
+                    }
                 }
             }, (error, updatedForumComment) => {
                 if (error) {

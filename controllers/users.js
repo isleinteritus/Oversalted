@@ -83,25 +83,31 @@ router.delete('/:id', (req, res) => {
         if (error) {
             console.error(error)
         } else {
-            Forum.findByIdAndUpdate(deletedUser.forumOwner, {
+
+            Forum.updateMany({}, {
                 $pull: {
-                    userForum: deletedUser.id
+                    userForums: {
+                        $in: deletedUser._id
+                    }
                 }
             }, (error, deletedForum) => {
                 if (error) {
                     console.error(error)
                 }
             })
-            Comment.findByIdAndUpdate(deletedUser.userComment, {
+
+            Comment.updateMany({}, {
                 $pull: {
-                    commentOwner: deletedComment.id
+                    commentOwner: {
+                        $in: deletedComment._id
+                    }
                 }
             }, (error, deletedComment) => {
                 if (error) {
                     console.error(error)
                 }
             })
-            res.json({message: "deleted user"})
+            res.json({message: "user committed not alive"})
         }
     })
 })
