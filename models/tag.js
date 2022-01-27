@@ -4,16 +4,15 @@ const mongoose = require('mongoose')
 
 const tagSchema = new mongoose.Schema(
     {
-        name: {
+        title: {
             type: String,
             required: true
         },
-        //add a description field. type string & required true
-        description: {
+        content: {
             type: String,
             required: true
         },
-        forum: [
+        taggedForums: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"

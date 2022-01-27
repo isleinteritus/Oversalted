@@ -7,7 +7,7 @@ const forumSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        body: {
+        content: {
             type: String,
             required: true
         },
@@ -15,22 +15,20 @@ const forumSchema = new mongoose.Schema(
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-            }//maybe this one needs a unique value for only one owner
+            }
         ],
         comments:[
-            //I wonder if I need to add another object containing the users of each comment. commentOwner?
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Comment"
             }
         ],
-        tags: [
+        parentTags: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Tag"
             }
         ],
-        //changed createdAt to createdOn. Makes more linguistic sense for readability
         createdOn: {
             type: Date,
             default: Date.now

@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const commentSchema = new mongoose.Schema(
     {
-        body: {
+        content: {
             type: String,
             required: true
         },
@@ -14,7 +14,7 @@ const commentSchema = new mongoose.Schema(
             ref: "User"
            }
         ],
-        forum: [
+        parentForum: [
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Forum"

@@ -16,13 +16,13 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        userForum: [ //use to be forum. Check any usage of forum in relation to userSchema
+        userForums: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Forum"
             }
         ],
-        userComment: [
+        userComments: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Comment"
