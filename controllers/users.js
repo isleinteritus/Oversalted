@@ -107,6 +107,7 @@ router.delete('/:id', (req, res) => {
                     console.error(error)
                 }
             })
+
             res.json({message: "user committed not alive"})
         }
     })

@@ -11,6 +11,7 @@ router.post ('/create', (req, res) => {
         if (error) {
             console.error(error)
         } else {
+
             User.findByIdAndUpdate(createdComment.commentOwner, {
                 $push: {
                     userComments: createdComment.id
@@ -20,6 +21,7 @@ router.post ('/create', (req, res) => {
                     console.error(error)
                 }
             })
+
             Forum.findByIdAndUpdate(createdComment.parentForum, {
                 $push: {
                     comments: createdComment.id
@@ -29,6 +31,7 @@ router.post ('/create', (req, res) => {
                     console.error(error)
                 }
             })
+
             res.json(createdComment)
         }
     })
@@ -70,6 +73,7 @@ router.delete('/:id', (req,res) => {
         if (error) {
             console.error(error)
         } else {
+
             User.updateOne({}, {
                 $pull: {
                     userComments: {
@@ -81,6 +85,7 @@ router.delete('/:id', (req,res) => {
                     console.error(error)
                 }
             })
+
             Forum.updateOne({}, {
                 $pull: {
                     comments: {
@@ -92,6 +97,7 @@ router.delete('/:id', (req,res) => {
                     console.error(error)
                 }
             })
+
             res.json({message: "Comment deleted"})
         }
     })

@@ -12,6 +12,7 @@ router.post ('/create', (req, res) => {
         if (error) {
             console.error(error)
         } else {
+
             User.findByIdAndUpdate(createdForum.forumOwner, {
                 $push: {
                     userForums: createdForum.id
@@ -21,16 +22,23 @@ router.post ('/create', (req, res) => {
                     console.error(error)
                 }
             })
-            //need a for each loop to add each forum to the correct tag, else only one is added
-            Tag.findByIdAndUpdate(createdForum.parentTags, {
-                $push: {
-                    taggedForums: createdForum.id
+
+            Tag.updateMany({
+                _id: {
+                    $in: createdForum.parentTags
                 }
-            }, (error, updatedForumTags) => {
-                if (error) {
-                        console.error(error)
+            }, {
+                $push: {
+                    taggedForums: {
+                        _id: createdForum._id
                     }
-                })
+                }
+            }, (error, updatedTags) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+
             res.json(createdForum)
         }
     })
@@ -74,8 +82,8 @@ router.put('/:id', (req,res) => {
     })
 })
 
-//DELETE (╯°Д°)╯︵/(.□ . \)
-//forum id
+//DELETE
+//forum id (╯°Д°)╯︵/(.□ . \)
 router.delete('/:id', (req,res) => {
     Forum.findByIdAndDelete(
         req.params.id,
@@ -129,6 +137,7 @@ router.delete('/:id', (req,res) => {
                 console.error(error)
             }
         })
+
             res.json({message: "Forum Deleted"})
         }
     })
