@@ -13,13 +13,18 @@ const methodOverride = require('method-override')
 const cors = require('cors')
 const logger = require('morgan')
 //redis variables
-const session = require('express-session')
 const Redis = require('ioredis')
+const session = require('express-session')
 const connectRedis = require('connect-redis')
 const RedisStore = connectRedis(session)
 const client = new Redis(config.REDIS_OPTIONS)
 
-mongoose.connect(config.MONGO_URI, config.MONGO_OPTIONS)
+mongoose.connect(
+    config.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    }
+)
 
 // error checks&&success \\
 db.on('error', (err) => console.log(err.message + 'Is mongodb not running?'))
@@ -40,7 +45,6 @@ app.use(logger('dev'))
 //redis session management
 app.use(
     session({
-        //do I need the spread operator? It grabs the whole thing already. Mmh.
         ...config.SESSION_OPTIONS, 
         store: new RedisStore({ 
             client 

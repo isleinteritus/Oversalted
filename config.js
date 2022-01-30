@@ -2,22 +2,18 @@
 require('dotenv').config()
 const IN_PROD = process.env.NODE_ENV === 'production'
 
-export default config = {
+const config = {
 
 // database \\
-MONGODB_URI: {
-    MONGODB_URI: `mongodb+srv://${process.env.MONGO_USERNAME}:${encodeURIComponent(process.env.MONGO_PASSWORD)}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?${process.env.MONGO_OPTION}`
-},
-MONGO_CONNECTION_OPTIONS: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-},
+MONGODB_URI: `mongodb+srv://${process.env.MONGO_USERNAME}:${encodeURIComponent(process.env.MONGO_PASSWORD)}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?${process.env.MONGO_OPTION}`,
+
 
 // cache \\
 
 REDIS_OPTIONS: {
     port: +process.env.REDIS_PORT,
-    host: process.env.REDIS_ENDPOINT,
+    //aka host
+    endpoint: process.env.REDIS_ENDPOINT,
     password: process.env.REDIS_PASSWORD
 },
 // session \\
@@ -31,10 +27,12 @@ SESSION_OPTIONS: {
     },
     rolling: true,
     resave: false,
-    saveUninitialize: false,
+    saveUninitialized: false,
 }
 //can objects hoist?^v
 // app \\
 
 // server \\
 }
+
+module.exports = config
