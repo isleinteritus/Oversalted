@@ -4,26 +4,18 @@
 // Dependencies \\
 require('dotenv').config()
 const config = require('./config.js')
+const APP_PORT = process.env.APP_PORT
 const express = require ('express')
 const app = express()
-const APP_PORT = process.env.APP_PORT
 const mongoose = require('mongoose')
 const db = mongoose.connection
 const methodOverride = require('method-override')
 const cors = require('cors')
 const logger = require('morgan')
-//redis variables
-const Redis = require('ioredis')
-const session = require('express-session')
-const connectRedis = require('connect-redis')
-const RedisStore = connectRedis(session)
-const client = new Redis(config.REDIS_OPTIONS)
+const session = require('./middlewares/session.js')
 
 mongoose.connect(
-    config.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    }
+    config.MONGODB_URI, config.MONGODB_OPTIONS
 )
 
 // error checks&&success \\
@@ -43,14 +35,7 @@ app.use(methodOverride('_method'))
 app.use(logger('dev'))
 
 //redis session management
-app.use(
-    session({
-        ...config.SESSION_OPTIONS, 
-        store: new RedisStore({ 
-            client 
-        }), 
-    })
-)
+app.use(session)
 
 // controller assignment \\
 const usersController = require('./controllers/users.js')

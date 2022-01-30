@@ -3,6 +3,8 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
+const authenticate = require('../middlewares/authenticate.js')
+
 //ROUTES
 ///////CREATE (signup)///////
 router.post('/signup', (req, res) => {
@@ -27,6 +29,7 @@ router.post('/login', (req, res) =>{
             res.json(foundUser)
         }
     })
+    
 })
 
 ///////INDEX///////
@@ -55,7 +58,8 @@ router.get('/:id', (req, res) => {
         }
     })
 })
-
+//NOTE: All routes below this [SHOULD BE!!] are routes accessed through authentication.
+router.use(authenticate)
 //UPDATE
 //user id
 router.put('/:id', (req, res) => {
