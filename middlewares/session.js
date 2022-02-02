@@ -5,9 +5,12 @@ const RedisStore = require('connect-redis')(session)
 
 const client = new Redis(config.REDIS_OPTIONS)
 
-module.exports = session({
+
+const redSession = session({
     ...config.SESSION_OPTIONS, 
     store: new RedisStore({ 
         client 
     }),
 })
+
+module.exports = redSession

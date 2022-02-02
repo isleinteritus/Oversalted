@@ -17,9 +17,10 @@ MONGODB_OPTIONS: {
 REDIS_OPTIONS: {
     port: +process.env.REDIS_PORT,
     //aka host
-    endpoint: process.env.REDIS_ENDPOINT,
+    host: process.env.REDIS_HOST,
     password: process.env.REDIS_PASSWORD
 },
+
 // session \\
 SESSION_OPTIONS: {
     secret: process.env.SESSION_SECRET,

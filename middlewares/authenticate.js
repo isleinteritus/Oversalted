@@ -1,13 +1,20 @@
-//const User = require(../models/user.js)
+const User = require('../models/user.js')
+const express = require('express')
 
-const authenticate = (req, res, next) => {
-    //this needs to be written better.
-    if (!req.session || !req.session.User) {
-        const err = new Error('YEEEEEEEEEEET')
-        err.status(401)
-        next(err)
-    }
-    next()
+const authentic = (req, res, next) => {
+    if (req.session && req.session.user) {
+        User.findOne({ 
+                email: req.session.user.email 
+        }, (error, user) => {
+          if (user) {
+            //TODO is there anything to do here?
+          }
+          // finishing processing the middleware and run the route
+          next()
+        })
+      } else {
+        next()
+      }
 }
 
-module.exports = authenticate
+module.exports = authentic

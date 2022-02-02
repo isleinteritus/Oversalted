@@ -12,13 +12,20 @@ const db = mongoose.connection
 const methodOverride = require('method-override')
 const cors = require('cors')
 const logger = require('morgan')
-const session = require('./middlewares/session.js')
+const redSession = require('./middlewares/session.js')
+
+// controller assignment \\
+const usersController = require('./controllers/users.js')
+const tagsController = require('./controllers/tags.js')
+const forumsController = require('./controllers/forums.js')
+const commentsController = require('./controllers/comments.js')
+
 
 mongoose.connect(
     config.MONGODB_URI, config.MONGODB_OPTIONS
 )
 
-// error checks&&success \\
+// DB error checks&&success \\
 db.on('error', (err) => console.log(err.message + 'Is mongodb not running?'))
 db.on('connected', ()=> console.log('Your mongod has connected'))
 db.on('disconnected', ()=> console.log('Your mongod has disconnected'))
@@ -35,16 +42,10 @@ app.use(methodOverride('_method'))
 app.use(logger('dev'))
 
 //redis session management
-app.use(session)
-
-// controller assignment \\
-const usersController = require('./controllers/users.js')
-const tagsController = require('./controllers/tags.js')
-const forumsController = require('./controllers/forums.js')
-const commentsController = require('./controllers/comments.js')
+app.use(redSession)
 
 // routes \\
-app.use('/user', usersController)
+app.use('/user', usersController, redSession)
 app.use('/forum', forumsController)
 app.use('/comment', commentsController)
 app.use('/tag', tagsController)
