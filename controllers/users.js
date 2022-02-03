@@ -51,6 +51,7 @@ router.post('/login', (req, res) =>{
 
 //PLACEHOLDER:TODO test route and add extra data. 
 router.post('/logout', (req, res) => {
+    User.findOne({})
     req.session.destroy((error, deletedSession) => {
         if (error) {
             console.error(error)
