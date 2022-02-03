@@ -3,16 +3,35 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
+const authentic = require('../middlewares/authenticate.js')
+const {registerValidation} = require('../middlewares/validation.js')
+
 //ROUTES
-///////CREATE (signup)///////
-router.post('/signup', (req, res) => {
-//could change req.body to req.body.name/email/password
-    User.create(req.body, (error, createdUser) =>{
-        if (error) {
-            console.error(error)
-        } else {
-            res.json(createdUser)
-        }
+///////CREATE USER///////
+router.post('/register', (req, res) => {
+    registerValidation.validate(req.body, {
+        abortEarly: false
+    })
+
+    const { email, name, password } = req.body
+    const found = User.exists({email})
+
+    if (found) {
+        res.send('Invalid email or password')
+    }
+
+    User.create({
+        email,
+        name,
+        password,
+    }, (error, createdUser) =>{
+            if (error) {++
+
+                
+                console.error(error)
+            } else {
+                res.json(createdUser)
+            }
     })
 })
 
@@ -24,7 +43,20 @@ router.post('/login', (req, res) =>{
         if (error) {
             console.error(error)
         } else {
+            req.session.email = foundUser.email
             res.json(foundUser)
+        }
+    })
+})
+
+//PLACEHOLDER:TODO test route and add extra data. 
+router.post('/logout', (req, res) => {
+    User.findOne({})
+    req.session.destroy((error, deletedSession) => {
+        if (error) {
+            console.error(error)
+        } else {
+            res.redirect('/')
         }
     })
 })
@@ -55,6 +87,8 @@ router.get('/:id', (req, res) => {
         }
     })
 })
+
+//NOTE: All routes below this point /should be/ routes accessed through authentication.
 
 //UPDATE
 //user id

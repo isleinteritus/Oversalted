@@ -2,23 +2,27 @@
 
 ## Project insight
 
-> Oversalted is a website troubleshoot forum focused on creating a a world-based community enviroment to cater towards recipe developement, muilti-ended corrections, and experimentation in hypothetical food-cooking.
+> Oversalted is a website troubleshooting forum focused on creating a all-world-based community enviroment to cater towards food-troubleshooting, recipe developement, muilti-ended corrections to such recipes, and experimentation in hypothetical food-cooking.
 
 ## GOALS
 
-- User to make an account
-- Admin acct? Maybe. Note sure yet with this one as the only reasoning right now is to add new tags but there are other methods of doing so.
-- User submit Question
-- Review/edit question
-- Generalized tag list
+- User can make an account
+- User can post a question
+- User can comment on question
+- User can vote on answers
+- User can delete their own questions and comments
+- Forums are sorted in a tag based organization system
+- User can edit their portfolio
 
 ## CURRENT Stretch Goals
 
-- Voting system that lets each user vote 1-3 times per forum on valid answers. This does not stack.
-- Feed that sorts by top three best answer, then sorts the rest by timeline of posted
-
+- Voting system that lets each user vote up to two times per forum on valid comment-answers. This does not stack.
+- sub forum per comment to discuss the comment
+- Forums can be sorted by users preference when they land on the tag index.
+- Using the @ symbol notifies the user they are being talked too.
+- User can favorite tags
+- on users homepage a rendered list of all recent tags tagged in their favorites
 =======
-
 
 ## Notes
 
