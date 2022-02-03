@@ -4,14 +4,11 @@ const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const authentic = require('../middlewares/authenticate.js')
-const {registerValidation} = require('../middlewares/validation.js')
+const {} = require('../middlewares/validation.js')
 
 //ROUTES
 ///////CREATE USER///////
 router.post('/register', (req, res) => {
-    registerValidation.validate(req.body, {
-        abortEarly: false
-    })
 
     const { email, name, password } = req.body
     const found = User.exists({email})
@@ -25,9 +22,7 @@ router.post('/register', (req, res) => {
         name,
         password,
     }, (error, createdUser) =>{
-            if (error) {++
-
-                
+            if (error) {
                 console.error(error)
             } else {
                 res.json(createdUser)
