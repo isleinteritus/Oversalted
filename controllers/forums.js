@@ -4,44 +4,52 @@ const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const Tag = require('../models/tag.js')
+const { postForumValStruct } = require('../middlewares/validation.js')
+const { validate, StructError } = require('superstruct')
 
 //ROUTES
 ///////CREATE///////
 router.post ('/create', (req, res) => {
-    Forum.create(req.body, (error, createdForum) => {
-        if (error) {
-            console.error(error)
-        } else {
+    const [error, forumVald] = validate(req.body, postForumValStruct)
+//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling. 
+    if (error instanceof StructError) {
+        console.error(error)
+    } else {
+        Forum.create(forumVald, (error, createdForum) => {
+            if (error) {
+                console.error(error)
+            } else {
 
-            User.findByIdAndUpdate(createdForum.forumOwner, {
-                $push: {
-                    userForums: createdForum.id
-                }
-            }, (error, updatedUserForum) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
-
-            Tag.updateMany({
-                _id: {
-                    $in: createdForum.parentTags
-                }
-            }, {
-                $push: {
-                    taggedForums: {
-                        _id: createdForum._id
+                User.findByIdAndUpdate(createdForum.forumOwner, {
+                    $push: {
+                        userForums: createdForum.id
                     }
-                }
-            }, (error, updatedTags) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
+                }, (error, updatedUserForum) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
 
-            res.json(createdForum)
-        }
-    })
+                Tag.updateMany({
+                    _id: {
+                        $in: createdForum.parentTags
+                    }
+                }, {
+                    $push: {
+                        taggedForums: {
+                            _id: createdForum._id
+                        }
+                    }
+                }, (error, updatedTags) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
+    //TODO ASK SKO FOR HELP WITH $each to push each tag into an array
+                res.json(createdForum)
+            }
+        })
+    }
 })
 ///////INDEX///////
 router.get('/index', (req, res)=> {

@@ -3,38 +3,47 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
+const { postCommentValStruct } = require('../middlewares/validation.js')
+const { validate, StructError } = require('superstruct')
 
 //ROUTES
 ///////CREATE///////
 router.post ('/create', (req, res) => {
-    Comment.create(req.body, (error, createdComment) => {
-        if (error) {
-            console.error(error)
-        } else {
+    const [error, commentVald] = validate(req.body, postCommentValStruct)
+    //TODO better error handling, with try/catch
+    if (error instanceof StructError) {
+        console.error(error)
+        res.json(error)
+    } else {
+        Comment.create(commentVald, (error, createdComment) => {
+            if (error) {
+                console.error(error)
+            } else {
 
-            User.findByIdAndUpdate(createdComment.commentOwner, {
-                $push: {
-                    userComments: createdComment.id
-                }
-            }, (error, updatedUserComment) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
+                User.findByIdAndUpdate(createdComment.commentOwner, {
+                    $push: {
+                        userComments: createdComment.id
+                    }
+                }, (error, updatedUserComment) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
 
-            Forum.findByIdAndUpdate(createdComment.parentForum, {
-                $push: {
-                    comments: createdComment.id
-                }
-            }, (error, updatedForumComment) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
+                Forum.findByIdAndUpdate(createdComment.parentForum, {
+                    $push: {
+                        comments: createdComment.id
+                    }
+                }, (error, updatedForumComment) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
 
-            res.json(createdComment)
-        }
-    })
+                res.json(createdComment)
+            }
+        })
+    }
 })
 ///////INDEX///////
 //forum ID

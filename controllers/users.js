@@ -4,49 +4,50 @@ const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const authentic = require('../middlewares/authenticate.js')
-const {registerValidation} = require('../middlewares/validation.js')
+const { regisUserValStruct, loginUserValStruct } = require('../middlewares/validation.js')
+const { assert, validate, coerce, create, StructError} = require('superstruct')
 
 //ROUTES
 ///////CREATE USER///////
 router.post('/register', (req, res) => {
-    registerValidation.validate(req.body, {
-        abortEarly: false
-    })
+    const [error, userVald] = validate(req.body, regisUserValStruct)
+    //TODO better error handling, with try/catch
+    //https://docs.superstructjs.org/guides/05-handling-errors
+   if (error instanceof StructError) {
+       console.error(error)
+       res.json(error)
+   } else {
 
-    const { email, name, password } = req.body
-    const found = User.exists({email})
-
-    if (found) {
-        res.send('Invalid email or password')
-    }
-
-    User.create({
-        email,
-        name,
-        password,
-    }, (error, createdUser) =>{
-            if (error) {++
-
-                
-                console.error(error)
-            } else {
-                res.json(createdUser)
-            }
-    })
+        User.create(
+            userVald
+        , (error, createdUser) =>{
+                if (error) {
+                    console.error(error)
+                } else {
+                    res.json(createdUser)
+                }
+        })
+}
+//TODO add sessions to user that registered.
+    //TODO before adding user to database, user needs to confirm idenity through email validation link. Maybe have limited access? schema for user: is validated or not? Hmn.
 })
 
-router.post('/login', (req, res) =>{
-    User.findOne({
-        email: req.body.email,
-        password: req.body.password
-    }, (error, foundUser) =>{
-        if (error) {
-            console.error(error)
-        } else {
-            req.session.email = foundUser.email
-            res.json(foundUser)
-        }
-    })
+router.post('/login', (req, res) => {
+const [error, userInfo] = validate(req.body, loginUserValStruct)
+    if (error) {
+        console.error(error)
+    } else {
+        User.findOne(
+            userInfo
+        , (error, foundUser) =>{
+            if (error) {
+                console.error(error)
+            } else {
+                req.session.email = foundUser.email
+                res.json(foundUser)
+            }
+        })
+    }
 })
 
 //PLACEHOLDER:TODO test route and add extra data. 
