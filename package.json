@@ -18,7 +18,8 @@
     "ioredis": "^4.28.3",
     "method-override": "^3.0.0",
     "mongoose": "^6.1.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "superstruct": "^0.15.3"
   },
   "repository": {
     "type": "git",
