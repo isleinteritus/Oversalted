@@ -1,5 +1,6 @@
 // variables \\
 require('dotenv').config()
+const { nanoid } = require('nanoid')
 const IN_PROD = process.env.NODE_ENV === 'production'
 
 const config = {
@@ -24,6 +25,9 @@ REDIS_OPTIONS: {
 // session \\
 SESSION_OPTIONS: {
     secret: process.env.SESSION_SECRET,
+    genid: (req) => {
+        nanoid()
+    },
     name: process.env.SESSION_NAME,
     cookie: {
         maxAge: +process.env.SESSION_IDLE_TIMEOUT,
