@@ -6,7 +6,7 @@ const Comment = require('../models/comment.js')
 const authentic = require('../middlewares/authenticate.js')
 const { regisUserValStruct, loginUserValStruct } = require('../middlewares/validation.js')
 const { assert, validate, coerce, create, StructError} = require('superstruct')
-
+const { nanoid } = require('nanoid')
 //ROUTES
 ///////CREATE USER///////
 router.post('/register', (req, res) => {
@@ -33,17 +33,28 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
+const keyGen = nanoid()
 const [error, userInfo] = validate(req.body, loginUserValStruct)
     if (error) {
         console.error(error)
     } else {
+
         User.findOne(
-            userInfo
-        , (error, foundUser) =>{
+            userInfo,
+        (error, foundUser) =>{
             if (error) {
                 console.error(error)
             } else {
-                req.session.email = foundUser.email
+
+                User.updateOne(foundUser, {
+                    logInKey: keyGen
+                }, (error, updatedUser) => {
+                        if (error) {
+                            console.error(error)
+                        }
+                    })
+
+                req.session.logInKey = keyGen
                 res.json(foundUser)
             }
         })
@@ -52,14 +63,33 @@ const [error, userInfo] = validate(req.body, loginUserValStruct)
 
 //PLACEHOLDER:TODO test route and add extra data. 
 router.post('/logout', (req, res) => {
-    User.findOne({})
-    req.session.destroy((error, deletedSession) => {
+    const user = req.body
+    User.findOne(
+        user,
+    (error, foundUser) =>{
         if (error) {
             console.error(error)
         } else {
-            res.redirect('/')
+
+            User.updateOne(foundUser,
+                {
+                    logInKey: ""
+                }
+                , (error, updatedUser) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
         }
     })
+
+    req.session.destroy((error, deletedSession) => {
+        if (error) {
+            console.error(error)
+        }
+    })
+
+    res.json({message : "you've been logged out"})
 })
 
 ///////INDEX///////
@@ -94,6 +124,7 @@ router.get('/:id', (req, res) => {
 //UPDATE
 //user id
 router.put('/:id', (req, res) => {
+    //tODO session
     User.findByIdAndUpdate(
         req.params.id,
     {
@@ -111,6 +142,7 @@ router.put('/:id', (req, res) => {
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
 router.delete('/:id', (req, res) => {
+    //todo session
     //finds the User id and removes it from the collection
     User.findByIdAndRemove(
         req.params.id,

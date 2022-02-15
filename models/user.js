@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        logInKey: {
+            type: String,
+            required: false
+        },
         userForums: [
             {
                 type: mongoose.Schema.Types.ObjectId,
