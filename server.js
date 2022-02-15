@@ -11,7 +11,7 @@ const mongoose = require('mongoose')
 const db = mongoose.connection
 const methodOverride = require('method-override')
 const cors = require('cors')
-const logger = require('morgan')
+const morgan = require('morgan')
 const redSession = require('./middlewares/session.js')
 
 // controller assignment \\
@@ -40,7 +40,18 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 //I don't think I need this since the above line is extended to true instead of false
 app.use(methodOverride('_method'))
-app.use(logger('dev'))
+app.use(morgan('dev'))
+
+//morgan watching the logs
+morgan.token('sessionid', function(req, res, param) {
+    return req.sessionID;
+});
+morgan.token('user', function(req, res, param) {
+    return req.session.user;
+});
+
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :user :sessionid'))
+
 
 //redis session management
 app.use(redSession)

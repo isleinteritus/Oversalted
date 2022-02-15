@@ -26,7 +26,7 @@ REDIS_OPTIONS: {
 SESSION_OPTIONS: {
     secret: process.env.SESSION_SECRET,
     genid: (req) => {
-        nanoid()
+        return nanoid()
     },
     name: process.env.SESSION_NAME,
     cookie: {
@@ -37,7 +37,7 @@ SESSION_OPTIONS: {
     },
     rolling: true,
     resave: false, //if call is made and nothing is added, then we will not override session
-    saveUninitialized: false, //if you make a request to the server, and no data iss stored to the session then it will not be written to the database.
+    saveUninitialized: false, //if you make a request to the server, and no data is stored to the session then it will not be written to the database.
 }
 //can objects hoist?^
 // app \\
