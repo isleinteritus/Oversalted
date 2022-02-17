@@ -3,7 +3,7 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
-const authentic = require('../middlewares/authenticate.js')
+const authentic = require('../middlewares/authentication.js')
 const { regisUserValStruct, loginUserValStruct } = require('../middlewares/validation.js')
 const { assert, validate, coerce, create, StructError} = require('superstruct')
 const { nanoid } = require('nanoid')
@@ -124,7 +124,8 @@ router.get('/:id', (req, res) => {
 //UPDATE
 //user id
 router.put('/:id', (req, res) => {
-    //tODO session
+    //tODO session authetication.  
+    //if true then do below. else error
     User.findByIdAndUpdate(
         req.params.id,
     {
@@ -142,7 +143,7 @@ router.put('/:id', (req, res) => {
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
 router.delete('/:id', (req, res) => {
-    //todo session
+    //todo Session
     //finds the User id and removes it from the collection
     User.findByIdAndRemove(
         req.params.id,

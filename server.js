@@ -57,7 +57,7 @@ app.use(morgan('dev'))
 app.use(redSession)
 
 // routes \\
-app.use('/user', usersController, redSession)
+app.use('/user', usersController)
 app.use('/forum', forumsController)
 app.use('/comment', commentsController)
 app.use('/tag', tagsController)
