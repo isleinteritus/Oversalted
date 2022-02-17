@@ -125,7 +125,11 @@ router.get('/:id', (req, res) => {
 //user id
 router.put('/:id', (req, res) => {
     //tODO session authetication.  
-    //if true then do below. else error
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     User.findByIdAndUpdate(
         req.params.id,
     {
@@ -137,14 +141,19 @@ router.put('/:id', (req, res) => {
             res.json({message: "updated user"})
         }
     })
+    //session regen
 })
 
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
 router.delete('/:id', (req, res) => {
-    //todo Session
-    //finds the User id and removes it from the collection
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     User.findByIdAndRemove(
         req.params.id,
         (error, deletedUser) => {
@@ -179,6 +188,13 @@ router.delete('/:id', (req, res) => {
             res.json({message: "user committed not alive"})
         }
     })
+
+    req.session.destroy((error, deletedSession) => {
+        if (error) {
+            console.error(error)
+        }
+    })
+
 })
 
 module.exports = router

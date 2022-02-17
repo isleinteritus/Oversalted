@@ -9,12 +9,18 @@ const { validate, StructError } = require('superstruct')
 //ROUTES
 ///////CREATE///////
 router.post ('/create', (req, res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
     const [error, commentVald] = validate(req.body, postCommentValStruct)
     //TODO better error handling, with try/catch
     if (error instanceof StructError) {
         console.error(error)
         res.json(error)
     } else {
+        //layer2 mongoose
         Comment.create(commentVald, (error, createdComment) => {
             if (error) {
                 console.error(error)
@@ -60,6 +66,12 @@ router.get('/:id', (req, res)=> {
 //UPDATE
 //comment id
 router.put('/:id', (req, res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Comment.findByIdAndUpdate(
         req.params.id, 
         {
@@ -76,6 +88,12 @@ router.put('/:id', (req, res) => {
 //DELETE
 //comment id
 router.delete('/:id', (req,res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Comment.findByIdAndDelete(
         req.params.id, 
         (error, deletedComment) => {

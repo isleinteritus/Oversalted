@@ -10,8 +10,14 @@ const { validate, StructError } = require('superstruct')
 //ROUTES
 ///////CREATE///////
 router.post ('/create', (req, res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     const [error, forumVald] = validate(req.body, postForumValStruct)
-//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling. 
+//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling.
     if (error instanceof StructError) {
         console.error(error)
     } else {
@@ -77,6 +83,12 @@ router.get('/:id', (req, res) => {
 //UPDATE
 //forum id
 router.put('/:id', (req,res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Forum.findByIdAndUpdate(
         req.params.id,
     {
@@ -93,6 +105,12 @@ router.put('/:id', (req,res) => {
 //DELETE
 //forum id (╯°Д°)╯︵/(.□ . \)
 router.delete('/:id', (req,res) => {
+    //tODO session authetication.  
+    //isloggedIn
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Forum.findByIdAndDelete(
         req.params.id,
         (error, deletedForum) => {
