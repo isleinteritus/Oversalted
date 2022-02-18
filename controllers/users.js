@@ -3,9 +3,10 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
-const authentic = require('../middlewares/authenticate.js')
+const { logInCheck } = require('../middlewares/authentication.js')
 const { regisUserValStruct, loginUserValStruct } = require('../middlewares/validation.js')
 const { assert, validate, coerce, create, StructError} = require('superstruct')
+const { nanoid } = require('nanoid')
 
 //ROUTES
 ///////CREATE USER///////
@@ -28,22 +29,32 @@ router.post('/register', (req, res) => {
                 }
         })
 }
-//TODO add sessions to user that registered.
     //TODO before adding user to database, user needs to confirm idenity through email validation link. Maybe have limited access? schema for user: is validated or not? Hmn.
 })
 
 router.post('/login', (req, res) => {
+const keyGen = nanoid()
 const [error, userInfo] = validate(req.body, loginUserValStruct)
     if (error) {
         console.error(error)
     } else {
+
         User.findOne(
-            userInfo
-        , (error, foundUser) =>{
+            userInfo,
+        (error, foundUser) =>{
             if (error) {
                 console.error(error)
             } else {
-                req.session.email = foundUser.email
+
+                User.updateOne(foundUser, {
+                    logInKey: keyGen
+                }, (error, updatedUser) => {
+                        if (error) {
+                            console.error(error)
+                        }
+                    })
+
+                req.session.logInKey = keyGen
                 res.json(foundUser)
             }
         })
@@ -52,14 +63,33 @@ const [error, userInfo] = validate(req.body, loginUserValStruct)
 
 //PLACEHOLDER:TODO test route and add extra data. 
 router.post('/logout', (req, res) => {
-    User.findOne({})
-    req.session.destroy((error, deletedSession) => {
+    const user = req.body
+    User.findOne(
+        user,
+    (error, foundUser) =>{
         if (error) {
             console.error(error)
         } else {
-            res.redirect('/')
+
+            User.updateOne(foundUser,
+                {
+                    logInKey: ""
+                }
+                , (error, updatedUser) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
         }
     })
+
+    req.session.destroy((error, deletedSession) => {
+        if (error) {
+            console.error(error)
+        }
+    })
+
+    res.json({message : "you've been logged out"})
 })
 
 ///////INDEX///////
@@ -89,11 +119,14 @@ router.get('/:id', (req, res) => {
     })
 })
 
-//NOTE: All routes below this point /should be/ routes accessed through authentication.
-
 //UPDATE
 //user id
-router.put('/:id', (req, res) => {
+router.put('/:id', logInCheck, (req, res) => {
+    //tODO session authetication.
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     User.findByIdAndUpdate(
         req.params.id,
     {
@@ -105,13 +138,18 @@ router.put('/:id', (req, res) => {
             res.json({message: "updated user"})
         }
     })
+    //session regen
 })
 
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
-router.delete('/:id', (req, res) => {
-    //finds the User id and removes it from the collection
+router.delete('/:id', logInCheck, (req, res) => {
+    //tODO session authetication.
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     User.findByIdAndRemove(
         req.params.id,
         (error, deletedUser) => {
@@ -146,6 +184,13 @@ router.delete('/:id', (req, res) => {
             res.json({message: "user committed not alive"})
         }
     })
+
+    req.session.destroy((error, deletedSession) => {
+        if (error) {
+            console.error(error)
+        }
+    })
+
 })
 
 module.exports = router

@@ -20,6 +20,7 @@ const regisUserValStruct = object({
     //TODO password confirmation done on frontend
     //password length min of 8 max of 100
     password: nonempty(size(string(), 8, 100)),
+    logInKey: empty(string()),
     userForums: empty(array()),
     userComments: empty(array()),
 })
@@ -29,6 +30,7 @@ const regisUserValStruct = object({
 const loginUserValStruct = object({
     email: nonempty(string()),
     password: nonempty(string()),
+    logInKey: empty(string())
 })
 
 //forum schemas\\

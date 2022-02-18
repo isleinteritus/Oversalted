@@ -1,5 +1,6 @@
 // variables \\
 require('dotenv').config()
+const { nanoid } = require('nanoid')
 const IN_PROD = process.env.NODE_ENV === 'production'
 
 const config = {
@@ -24,6 +25,9 @@ REDIS_OPTIONS: {
 // session \\
 SESSION_OPTIONS: {
     secret: process.env.SESSION_SECRET,
+    genid: (req) => {
+        return nanoid()
+    },
     name: process.env.SESSION_NAME,
     cookie: {
         maxAge: +process.env.SESSION_IDLE_TIMEOUT,
@@ -33,7 +37,7 @@ SESSION_OPTIONS: {
     },
     rolling: true,
     resave: false, //if call is made and nothing is added, then we will not override session
-    saveUninitialized: false, //if you make a request to the server, and no data iss stored to the session then it will not be written to the database.
+    saveUninitialized: false, //if you make a request to the server, and no data is stored to the session then it will not be written to the database.
 }
 //can objects hoist?^
 // app \\

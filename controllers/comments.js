@@ -5,16 +5,22 @@ const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const { postCommentValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
+const { logInCheck } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', (req, res) => {
+router.post ('/create', logInCheck, (req, res) => {
+    //tODO session authetication.  
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
     const [error, commentVald] = validate(req.body, postCommentValStruct)
     //TODO better error handling, with try/catch
     if (error instanceof StructError) {
         console.error(error)
         res.json(error)
     } else {
+        //layer2 mongoose
         Comment.create(commentVald, (error, createdComment) => {
             if (error) {
                 console.error(error)
@@ -59,7 +65,12 @@ router.get('/:id', (req, res)=> {
 
 //UPDATE
 //comment id
-router.put('/:id', (req, res) => {
+router.put('/:id', logInCheck, (req, res) => {
+    //tODO session authetication.  
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Comment.findByIdAndUpdate(
         req.params.id, 
         {
@@ -75,7 +86,12 @@ router.put('/:id', (req, res) => {
 
 //DELETE
 //comment id
-router.delete('/:id', (req,res) => {
+router.delete('/:id', logInCheck, (req,res) => {
+    //tODO session authetication.  
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Comment.findByIdAndDelete(
         req.params.id, 
         (error, deletedComment) => {

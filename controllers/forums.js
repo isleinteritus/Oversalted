@@ -6,12 +6,18 @@ const Comment = require('../models/comment.js')
 const Tag = require('../models/tag.js')
 const { postForumValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
+const { logInCheck } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', (req, res) => {
+router.post ('/create', logInCheck, (req, res) => {
+    //tODO session authetication.
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     const [error, forumVald] = validate(req.body, postForumValStruct)
-//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling. 
+//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling.
     if (error instanceof StructError) {
         console.error(error)
     } else {
@@ -45,7 +51,7 @@ router.post ('/create', (req, res) => {
                         console.error(error)
                     }
                 })
-    //TODO ASK SKO FOR HELP WITH $each to push each tag into an array
+    //$each to push each tag into an array
                 res.json(createdForum)
             }
         })
@@ -76,7 +82,12 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 //forum id
-router.put('/:id', (req,res) => {
+router.put('/:id', logInCheck, (req,res) => {
+    //tODO session authetication.  
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Forum.findByIdAndUpdate(
         req.params.id,
     {
@@ -92,7 +103,12 @@ router.put('/:id', (req,res) => {
 
 //DELETE
 //forum id (╯°Д°)╯︵/(.□ . \)
-router.delete('/:id', (req,res) => {
+router.delete('/:id', logInCheck, (req,res) => {
+    //tODO session authetication.
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
     Forum.findByIdAndDelete(
         req.params.id,
         (error, deletedForum) => {
