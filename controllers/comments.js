@@ -3,25 +3,24 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
-const { postCommentValStruct } = require('../middlewares/validation.js')
+const { commentValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
-const { logInCheck } = require('../middlewares/authentication.js')
+const { loggedInCheck } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', logInCheck, (req, res) => {
-    //tODO session authetication.  
+router.post ('/create', loggedInCheck, (req, res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
-    const [error, commentVald] = validate(req.body, postCommentValStruct)
+        //layer2 mongoose
+    const [error, commentVal] = validate(req.body, commentValStruct)
     //TODO better error handling, with try/catch
     if (error instanceof StructError) {
         console.error(error)
         res.json(error)
     } else {
-        //layer2 mongoose
-        Comment.create(commentVald, (error, createdComment) => {
+        Comment.create(commentVal, (error, createdComment) => {
             if (error) {
                 console.error(error)
             } else {
@@ -65,67 +64,69 @@ router.get('/:id', (req, res)=> {
 
 //UPDATE
 //comment id
-router.put('/:id', logInCheck, (req, res) => {
-    //tODO session authetication.  
+router.put('/:id', loggedInCheck, (req, res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
         //layer2 mongoose
-    Comment.findByIdAndUpdate(
-        req.params.id, 
-        {
-            ...req.body
-        }, (error, updatedComment) => {
-            if (error) {
-                console.error(error)
-            } else {
-                res.json({message:"successful"})
+    const [error, commentVal] = validate(req.body, commentValStruct)
+    //TODO better error handling, with try/catch
+    if (error instanceof StructError) {
+        console.error(error)
+        res.json(error)
+    } else {
+        Comment.findByIdAndUpdate(
+            req.params.id, 
+            {
+                ...commentVal
+            }, (error, updatedComment) => {
+                if (error) {
+                    console.error(error)
+                } else {
+                    res.json({message:"successful"})
+                }
             }
-        })
+        )
+    }
 })
 
 //DELETE
 //comment id
-router.delete('/:id', logInCheck, (req,res) => {
-    //tODO session authetication.  
-    //Authorize logic
-        //validate information
-        //layer 1 superstruct
-        //layer2 mongoose
-    Comment.findByIdAndDelete(
-        req.params.id, 
-        (error, deletedComment) => {
-        if (error) {
-            console.error(error)
-        } else {
+router.delete('/:id', loggedInCheck, (req,res) => {
+        Comment.findByIdAndDelete(
+            req.params.id, 
+            (error, deletedComment) => {
+            if (error) {
+                console.error(error)
+            } else {
 
-            User.updateOne({}, {
-                $pull: {
-                    userComments: {
-                        $in: deletedComment._id
+                User.updateOne({}, {
+                    $pull: {
+                        userComments: {
+                            $in: deletedComment._id
+                        }
                     }
-                }
-            }, (error, updatedUserComment) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
-
-            Forum.updateOne({}, {
-                $pull: {
-                    comments: {
-                        $in: deletedComment._id
+                }, (error, updatedUserComment) => {
+                    if (error) {
+                        console.error(error)
                     }
-                }
-            }, (error, updatedForumComment) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
+                })
 
-            res.json({message: "Comment deleted"})
-        }
-    })
+                Forum.updateOne({}, {
+                    $pull: {
+                        comments: {
+                            $in: deletedComment._id
+                        }
+                    }
+                }, (error, updatedForumComment) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
+
+                res.json({message: "Comment deleted"})
+            }
+        })
 })
 
 module.exports = router

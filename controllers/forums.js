@@ -4,22 +4,24 @@ const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const Tag = require('../models/tag.js')
-const { postForumValStruct } = require('../middlewares/validation.js')
+const { forumValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
-const { logInCheck } = require('../middlewares/authentication.js')
+const { loggedInCheck } = require('../middlewares/authentication.js')
+
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', logInCheck, (req, res) => {
-    //tODO session authetication.
+router.post ('/create', loggedInCheck, (req, res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
         //layer2 mongoose
-    const [error, forumVald] = validate(req.body, postForumValStruct)
-//TODO better error handling to define which error is thrown first. Wrap in try catch block for error handling.
+    const [error, forumVald] = validate(req.body, forumValStruct)
+    //TODO better error handling, with try/catch
+    //https://docs.superstructjs.org/guides/05-handling-errors
     if (error instanceof StructError) {
         console.error(error)
+        res.json(error)
     } else {
         Forum.create(forumVald, (error, createdForum) => {
             if (error) {
@@ -82,89 +84,99 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 //forum id
-router.put('/:id', logInCheck, (req,res) => {
-    //tODO session authetication.  
+router.put('/:id', loggedInCheck, (req,res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
         //layer2 mongoose
-    Forum.findByIdAndUpdate(
-        req.params.id,
-    {
-        ...req.body
-    }, (error, updatedForum) => {
-        if (error) {
+    const [error, forumVald] = validate(req.body, forumValStruct)
+    //TODO better error handling, with try/catch
+    //https://docs.superstructjs.org/guides/05-handling-errors
+    if (error instanceof StructError) {
+        console.error(error)
+        res.json(error)
+    } else {
+        const [error, forumVald] = validate(req.body, forumValStruct)
+        //TODO better error handling, with try/catch
+        //https://docs.superstructjs.org/guides/05-handling-errors
+        if (error instanceof StructError) {
             console.error(error)
+            res.json(error)
         } else {
-            res.json({message:"successful"})
+            Forum.findByIdAndUpdate(
+                req.params.id,
+            {
+                ...req.body
+            }, (error, updatedForum) => {
+                if (error) {
+                    console.error(error)
+                } else {
+                    res.json({message:"successful"})
+                }
+            })
         }
-    })
+    }
 })
 
 //DELETE
 //forum id (╯°Д°)╯︵/(.□ . \)
-router.delete('/:id', logInCheck, (req,res) => {
-    //tODO session authetication.
-    //Authorize logic
-        //validate information
-        //layer 1 superstruct
-        //layer2 mongoose
-    Forum.findByIdAndDelete(
-        req.params.id,
-        (error, deletedForum) => {
-        if (error) {
-            console.error(error)
-        } else {
-
-            User.updateMany({}, {
-                $pull: {
-                    userForums: {
-                        $in: deletedForum._id
-                    }
-                }
-            }, (error, updatedUser) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
-
-            User.updateMany({}, {
-                $pull: {
-                    userComments: {
-                        $in: deletedForum.comments
-                    }
-                }
-            }, (error, updatedUser) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
-
-            Comment.deleteMany({
-                _id: {
-                    $in: deletedForum.comments
-                }
-            }, (error, deletedComment) => {
-                if (error) {
-                    console.error(error)
-                }
-            })
-
-            Tag.updateMany({}, {
-                $pull: {
-                    taggedForums: {
-                        $in: deletedForum._id
-                    }
-                }
-        }, (error, updatedTag) => {
+router.delete('/:id', loggedInCheck, (req,res) => {
+        Forum.findByIdAndDelete(
+            req.params.id,
+            (error, deletedForum) => {
             if (error) {
                 console.error(error)
+            } else {
+
+                User.updateMany({}, {
+                    $pull: {
+                        userForums: {
+                            $in: deletedForum._id
+                        }
+                    }
+                }, (error, updatedUser) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
+
+                User.updateMany({}, {
+                    $pull: {
+                        userComments: {
+                            $in: deletedForum.comments
+                        }
+                    }
+                }, (error, updatedUser) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
+
+                Comment.deleteMany({
+                    _id: {
+                        $in: deletedForum.comments
+                    }
+                }, (error, deletedComment) => {
+                    if (error) {
+                        console.error(error)
+                    }
+                })
+
+                Tag.updateMany({}, {
+                    $pull: {
+                        taggedForums: {
+                            $in: deletedForum._id
+                        }
+                    }
+            }, (error, updatedTag) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+
+                res.json({message: "Forum Deleted"})
             }
         })
-
-            res.json({message: "Forum Deleted"})
-        }
-    })
 })
 
 module.exports = router
