@@ -6,12 +6,12 @@ const Comment = require('../models/comment.js')
 const Tag = require('../models/tag.js')
 const { postForumValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
+const { logInCheck } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', (req, res) => {
-    //tODO session authetication.  
-    //isloggedIn
+router.post ('/create', logInCheck, (req, res) => {
+    //tODO session authetication.
     //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -51,7 +51,7 @@ router.post ('/create', (req, res) => {
                         console.error(error)
                     }
                 })
-    //TODO ASK SKO FOR HELP WITH $each to push each tag into an array
+    //$each to push each tag into an array
                 res.json(createdForum)
             }
         })
@@ -82,9 +82,8 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 //forum id
-router.put('/:id', (req,res) => {
+router.put('/:id', logInCheck, (req,res) => {
     //tODO session authetication.  
-    //isloggedIn
     //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -104,9 +103,8 @@ router.put('/:id', (req,res) => {
 
 //DELETE
 //forum id (╯°Д°)╯︵/(.□ . \)
-router.delete('/:id', (req,res) => {
-    //tODO session authetication.  
-    //isloggedIn
+router.delete('/:id', logInCheck, (req,res) => {
+    //tODO session authetication.
     //Authorize logic
         //validate information
         //layer 1 superstruct

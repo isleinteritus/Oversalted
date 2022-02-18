@@ -3,31 +3,14 @@ const express = require('express')
 const session = require('express-session')
 
 //not sure if I will use these. May just have to write my own specific checks that cater towards each route. Yikes. 
-const loggedIn = (req, res, next) => {
+const logInCheck = (req, res, next) => {
     if (!req.session || !req.session.logInKey) {
-        return false
+        res.json({message: "You must log in to use that action"})
+        next()
     }
     next()
 }
 
-const authentic = (req, res, next) => {
-    const sessionLogInKey = req.session.logInKey
-    const user = req.body
-    if (loggedIn() === false) {
-        res.json({ message: "not logged in" })
-    } else {
-        User.findOne(user, (error, foundUser) => {
-            if (error) {
-                console.error(error)
-            } else if(foundUser.logInKey === sessionLogInKey) {
-                next()
-            } else {
-                res.json({message: "You don't have access to this"})
-            }
-        })
-    }
-
-    next()
+module.exports = {
+    logInCheck
 }
-
-module.exports = authentic

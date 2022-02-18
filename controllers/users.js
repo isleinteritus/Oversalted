@@ -3,10 +3,11 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
-const authentic = require('../middlewares/authentication.js')
+const { logInCheck } = require('../middlewares/authentication.js')
 const { regisUserValStruct, loginUserValStruct } = require('../middlewares/validation.js')
 const { assert, validate, coerce, create, StructError} = require('superstruct')
 const { nanoid } = require('nanoid')
+
 //ROUTES
 ///////CREATE USER///////
 router.post('/register', (req, res) => {
@@ -28,7 +29,6 @@ router.post('/register', (req, res) => {
                 }
         })
 }
-//TODO add sessions to user that registered.
     //TODO before adding user to database, user needs to confirm idenity through email validation link. Maybe have limited access? schema for user: is validated or not? Hmn.
 })
 
@@ -119,13 +119,10 @@ router.get('/:id', (req, res) => {
     })
 })
 
-//NOTE: All routes below this point /should be/ routes accessed through authentication.
-
 //UPDATE
 //user id
-router.put('/:id', (req, res) => {
-    //tODO session authetication.  
-    //isloggedIn
+router.put('/:id', logInCheck, (req, res) => {
+    //tODO session authetication.
     //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -147,9 +144,8 @@ router.put('/:id', (req, res) => {
 //DELETE
 //todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
-router.delete('/:id', (req, res) => {
-    //tODO session authetication.  
-    //isloggedIn
+router.delete('/:id', logInCheck, (req, res) => {
+    //tODO session authetication.
     //Authorize logic
         //validate information
         //layer 1 superstruct
