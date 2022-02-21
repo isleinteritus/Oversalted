@@ -33,7 +33,6 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-const keyGen = nanoid()
 const [error, userInfo] = validate(req.body, loginUserValStruct)
     if (error) {
         console.error(error)
@@ -45,7 +44,7 @@ const [error, userInfo] = validate(req.body, loginUserValStruct)
             if (error) {
                 console.error(error)
             } else {
-
+                const keyGen = nanoid()
                 User.updateOne(foundUser, {
                     logInKey: keyGen
                 }, (error, updatedUser) => {
@@ -122,6 +121,10 @@ router.get('/:id', (req, res) => {
 //UPDATE
 //user id
 router.put('/:id', loggedInCheck, (req, res) => {
+    //Authorize logic
+            //validate information
+            //layer 1 superstruct
+            //layer2 mongoose
     const [error, userVal] = validate(req.body, userValStruct)
     //TODO better error handling, with try/catch
     //https://docs.superstructjs.org/guides/05-handling-errors
@@ -129,10 +132,6 @@ router.put('/:id', loggedInCheck, (req, res) => {
        console.error(error)
        res.json(error)
    } else {
-        //Authorize logic
-            //validate information
-            //layer 1 superstruct
-            //layer2 mongoose
         User.findByIdAndUpdate(
             req.body.id,
         {
@@ -149,44 +148,55 @@ router.put('/:id', loggedInCheck, (req, res) => {
 })
 
 //DELETE
-//todo check if user has permission to delete their account. requires token so ignore this for now on all controllers until ready to implement
 //user ID
 router.delete('/:id', loggedInCheck, (req, res) => {
-        User.findByIdAndRemove(
-            req.params.id,
-            (error, deletedUser) => {
-            if (error) {
-                console.error(error)
-            } else {
+    //TODO add boolean to userval struct as areyousure check.
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
+        const [error, userVal] = validate(req.body, userValStruct)
+        //TODO better error handling, with try/catch
+        //https://docs.superstructjs.org/guides/05-handling-errors
+        if (error instanceof StructError) {
+            console.error(error)
+            res.json(error)
+        } else {
+            User.findByIdAndRemove(
+                req.params.id,
+                (error, deletedUser) => {
+                if (error) {
+                    console.error(error)
+                } else {
 
-                Forum.updateMany({}, {
-                    $pull: {
-                        userForums: {
-                            $in: deletedUser._id
+                    Forum.updateMany({}, {
+                        $pull: {
+                            userForums: {
+                                $in: deletedUser._id
+                            }
                         }
-                    }
-                }, (error, deletedForum) => {
-                    if (error) {
-                        console.error(error)
-                    }
-                })
-
-                Comment.updateMany({}, {
-                    $pull: {
-                        commentOwner: {
-                            $in: deletedComment._id
+                    }, (error, deletedForum) => {
+                        if (error) {
+                            console.error(error)
                         }
-                    }
-                }, (error, deletedComment) => {
-                    if (error) {
-                        console.error(error)
-                    }
-                })
+                    })
 
-                res.json({message: "user committed not alive"})
-            }
-        })
-    
+                    Comment.updateMany({}, {
+                        $pull: {
+                            commentOwner: {
+                                $in: deletedComment._id
+                            }
+                        }
+                    }, (error, deletedComment) => {
+                        if (error) {
+                            console.error(error)
+                        }
+                    })
+
+                    res.json({message: "user committed not alive"})
+                }
+            })
+        }
         req.session.destroy((error, deletedSession) => {
             if (error) {
                 console.error(error)

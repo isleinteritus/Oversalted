@@ -28,13 +28,14 @@ const regisUserValStruct = object({
 //validates user login info
 const loginUserValStruct = object({
     email: nonempty(string()),
-    password: nonempty(string())
+    password: nonempty(string()),
+    logInKey: empty(string())
 })
 
 //validates user info
 const userValStruct = object({
+    name:nonempty(string()),
     email: nonempty(string()),
-    password: nonempty(string()),
     logInKey: nonempty(string()) //string size of each key? 
 })
 
@@ -44,8 +45,8 @@ const userValStruct = object({
 const forumValStruct = object({
     title: nonempty(size(string(), 1, 60)),
     content: nonempty(string()),
-    forumOwner: nonempty(array()),
-    parentTags: nonempty(array(string()))
+    forumOwner: nonempty(string()),
+    parentTags: nonempty(array()),
 })
 
 //comment schemas\\
