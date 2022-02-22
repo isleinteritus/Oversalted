@@ -20,15 +20,6 @@ const roleCheck ={
 }
 
 //permissions
-const canEdit = () =>{
-
-}
-const canDelete = () =>{
-
-}
-const canUpdate = () =>{
-
-}
 const canAlter = () => {
 
 }
