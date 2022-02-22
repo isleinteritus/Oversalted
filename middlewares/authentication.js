@@ -6,11 +6,35 @@ const session = require('express-session')
 const loggedInCheck = (req, res, next) => {
     if (!req.session || !req.session.logInKey) {
         res.json({message: "You must log in to use that action"})
-        next()
     }
     next()
 }
 
+const ROLE = {
+    admin: 'admin',
+    moderator: 'mod',
+    user: 'user'
+}
+const roleCheck ={
+
+}
+
+//permissions
+const canEdit = () =>{
+
+}
+const canDelete = () =>{
+
+}
+const canUpdate = () =>{
+
+}
+const canAlter = () => {
+
+}
+
+
 module.exports = {
-    loggedInCheck
+    loggedInCheck,
+    roleCheck
 }
