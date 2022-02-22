@@ -6,7 +6,7 @@ const Forum = require('../models/forum.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', (req, res) => {
+router.post ('/create', /*loggedInCheck, isAdmin,*/ (req, res) => {
     Tag.create(req.body, (error, createdTag) =>{
         if (error) {
             console.error(error)
@@ -57,4 +57,30 @@ router.put('/:id', (req, res) => {
         }
     })
 })
+//potential edge cases of having one tag only and all forums will require at least one tag
+router.delete('/:id', /*loggedInCheck, isAdmin,*/ (req, res) => {
+    Tag.findByIdAndDelete(
+        req.params.id, 
+        (error, deletedTag) => {
+        if (error) {
+            console.error(error)
+        } else {
+
+            Forum.updateMany({}, {
+                $pull: {
+                    parentTags: {
+                        $in: deletedTag._id
+                    }
+                }
+            }, (error, updatedForumTag) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
+
+            res.json({message: "Tag deleted"})
+        }
+    })
+})
+
 module.exports = router

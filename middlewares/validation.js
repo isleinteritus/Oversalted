@@ -54,8 +54,13 @@ const forumValStruct = object({
 //validates that this is the comment
 const commentValStruct = object({
     content: nonempty(string()),
-    commentOwner: nonempty(array()),
-    parentForum: nonempty(array()),
+    commentOwner: nonempty(string()),
+    parentForum: nonempty(string()),
+})
+//tag schemas\\
+const tagValStruct = object({
+    title: nonempty(string()),
+    content: nonempty(string())
 })
 
 module.exports = {
@@ -63,6 +68,7 @@ module.exports = {
     loginUserValStruct,
     userValStruct,
     forumValStruct,
-    commentValStruct
+    commentValStruct,
+    tagValStruct
 }
 

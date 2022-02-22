@@ -23,7 +23,6 @@ router.post ('/create', loggedInCheck, (req, res) => {
         console.error(error)
         res.json(error)
     } else {
-    //TODO: errors here because it requires the ID of tags not the name of tags. So in order to to solve it create a couple of tags and grab their ID placing it into postman under parentTags. That should fix the casting error.
         Forum.create(forumVal, (error, createdForum) => {
             if (error) {
                 console.error(error)
@@ -83,41 +82,41 @@ router.get('/:id', (req, res) => {
     })
 })
 
-// //UPDATE
-// //forum id
-// router.put('/:id', loggedInCheck, (req,res) => {
-//     //Authorize logic
-//         //validate information
-//         //layer 1 superstruct
-//         //layer2 mongoose
-//     const [error, forumVald] = validate(req.body, forumValStruct)
-//     //TODO better error handling, with try/catch
-//     //https://docs.superstructjs.org/guides/05-handling-errors
-//     if (error instanceof StructError) {
-//         console.error(error)
-//         res.json(error)
-//     } else {
-//         const [error, forumVald] = validate(req.body, forumValStruct)
-//         //TODO better error handling, with try/catch
-//         //https://docs.superstructjs.org/guides/05-handling-errors
-//         if (error instanceof StructError) {
-//             console.error(error)
-//             res.json(error)
-//         } else {
-//             Forum.findByIdAndUpdate(
-//                 req.params.id,
-//             {
-//                 ...req.body
-//             }, (error, updatedForum) => {
-//                 if (error) {
-//                     console.error(error)
-//                 } else {
-//                     res.json({message:"successful"})
-//                 }
-//             })
-//         }
-//     }
-// })
+//UPDATE
+//forum id
+router.put('/:id', loggedInCheck, (req,res) => {
+    //Authorize logic
+        //validate information
+        //layer 1 superstruct
+        //layer2 mongoose
+    const [error, forumVald] = validate(req.body, forumValStruct)
+    //TODO better error handling, with try/catch
+    //https://docs.superstructjs.org/guides/05-handling-errors
+    if (error instanceof StructError) {
+        console.error(error)
+        res.json(error)
+    } else {
+        const [error, forumVald] = validate(req.body, forumValStruct)
+        //TODO better error handling, with try/catch
+        //https://docs.superstructjs.org/guides/05-handling-errors
+        if (error instanceof StructError) {
+            console.error(error)
+            res.json(error)
+        } else {
+            Forum.findByIdAndUpdate(
+                req.params.id,
+            {
+                ...req.body
+            }, (error, updatedForum) => {
+                if (error) {
+                    console.error(error)
+                } else {
+                    res.json({message:"successful"})
+                }
+            })
+        }
+    }
+})
 
 //DELETE
 //forum id (╯°Д°)╯︵/(.□ . \)

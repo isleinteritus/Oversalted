@@ -53,11 +53,11 @@ router.post ('/create', loggedInCheck, (req, res) => {
 ///////INDEX///////
 //forum ID
 router.get('/:id', (req, res)=> {
-    Comment.find({parentForum: req.params.id}, (error, foundComments) => {
+    Comment.findById(req.params.id, (error, foundComment) => {
         if (error) {
             console.error(error)
         } else {
-            res.json(foundComments)
+            res.json(foundComment)
         }
     })
 })
@@ -93,40 +93,40 @@ router.put('/:id', loggedInCheck, (req, res) => {
 //DELETE
 //comment id
 router.delete('/:id', loggedInCheck, (req,res) => {
-        Comment.findByIdAndDelete(
-            req.params.id, 
-            (error, deletedComment) => {
-            if (error) {
-                console.error(error)
-            } else {
+    Comment.findByIdAndDelete(
+        req.params.id, 
+        (error, deletedComment) => {
+        if (error) {
+            console.error(error)
+        } else {
 
-                User.updateOne({}, {
-                    $pull: {
-                        userComments: {
-                            $in: deletedComment._id
-                        }
+            User.updateOne({}, {
+                $pull: {
+                    userComments: {
+                        $in: deletedComment._id
                     }
-                }, (error, updatedUserComment) => {
-                    if (error) {
-                        console.error(error)
-                    }
-                })
+                }
+            }, (error, updatedUserComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
 
-                Forum.updateOne({}, {
-                    $pull: {
-                        comments: {
-                            $in: deletedComment._id
-                        }
+            Forum.updateOne({}, {
+                $pull: {
+                    comments: {
+                        $in: deletedComment._id
                     }
-                }, (error, updatedForumComment) => {
-                    if (error) {
-                        console.error(error)
-                    }
-                })
+                }
+            }, (error, updatedForumComment) => {
+                if (error) {
+                    console.error(error)
+                }
+            })
 
-                res.json({message: "Comment deleted"})
-            }
-        })
+            res.json({message: "Comment deleted"})
+        }
+    })
 })
 
 module.exports = router
