@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
                     res.json(createdUser)
                 }
         })
-}
+    }
     //TODO before adding user to database, user needs to confirm idenity through email validation link. Maybe have limited access? schema for user: is validated or not? Hmn.
 })
 
@@ -150,18 +150,7 @@ router.put('/:id', loggedInCheck, (req, res) => {
 //DELETE
 //user ID
 router.delete('/:id', loggedInCheck, (req, res) => {
-    //TODO add boolean to userval struct as areyousure check.
-    //Authorize logic
-        //validate information
-        //layer 1 superstruct
-        //layer2 mongoose
-        const [error, userVal] = validate(req.body, userValStruct)
-        //TODO better error handling, with try/catch
-        //https://docs.superstructjs.org/guides/05-handling-errors
-        if (error instanceof StructError) {
-            console.error(error)
-            res.json(error)
-        } else {
+//TODO validation for that this is the user asking to delete requested user
             User.findByIdAndRemove(
                 req.params.id,
                 (error, deletedUser) => {
@@ -170,23 +159,16 @@ router.delete('/:id', loggedInCheck, (req, res) => {
                 } else {
 
                     Forum.updateMany({}, {
-                        $pull: {
-                            userForums: {
-                                $in: deletedUser._id
-                            }
-                        }
+                        forumOwner: null
                     }, (error, deletedForum) => {
                         if (error) {
                             console.error(error)
                         }
                     })
-
+                    //TODO this one needs to be fixed
                     Comment.updateMany({}, {
-                        $pull: {
-                            commentOwner: {
-                                $in: deletedComment._id
-                            }
-                        }
+                        //.TODO PLACEHOLDER TEXT FOR FUTURE USAGE.
+                            commentOwner: null
                     }, (error, deletedComment) => {
                         if (error) {
                             console.error(error)
@@ -196,7 +178,6 @@ router.delete('/:id', loggedInCheck, (req, res) => {
                     res.json({message: "user committed not alive"})
                 }
             })
-        }
         req.session.destroy((error, deletedSession) => {
             if (error) {
                 console.error(error)

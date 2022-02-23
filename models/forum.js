@@ -11,12 +11,10 @@ const forumSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        forumOwner: [
-            {
+        forumOwner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-            }
-        ],
+            },
         comments:[
             {
                 type: mongoose.Schema.Types.ObjectId,
