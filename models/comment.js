@@ -8,12 +8,10 @@ const commentSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        commentOwner: [
-            {
+        commentOwner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
-           }
-        ],
+           },
         parentForum: [
             {
             type: mongoose.Schema.Types.ObjectId,

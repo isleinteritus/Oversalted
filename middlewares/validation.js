@@ -11,7 +11,7 @@ const { object, string, array, enums, trimmed, size, pattern, nonempty, empty } 
 
 //USER SCHEMAS\\
 
-//validation for the registering user
+//validates registering user info
 const regisUserValStruct = object({
     //few assumptions about how a name /should/ be.
     //size = type, min, max
@@ -25,37 +25,50 @@ const regisUserValStruct = object({
     userComments: empty(array()),
 })
 
-//TODO REFINE
-//validates that this is the user
+//validates user login info
 const loginUserValStruct = object({
     email: nonempty(string()),
     password: nonempty(string()),
     logInKey: empty(string())
 })
 
+//validates user info
+const userValStruct = object({
+    name:nonempty(string()),
+    email: nonempty(string()),
+    logInKey: nonempty(string()) //string size of each key? 
+})
+
 //forum schemas\\
 
 //validates the forum submission is correct 
-const postForumValStruct = object({
+const forumValStruct = object({
     title: nonempty(size(string(), 1, 60)),
     content: nonempty(string()),
-    forumOwner: nonempty(array()),
-    parentTags: nonempty(array(string()))
+    forumOwner: nonempty(string()),
+    parentTags: nonempty(array()),
 })
 
 //comment schemas\\
 
 //validates that this is the comment
-const postCommentValStruct = object({
+const commentValStruct = object({
     content: nonempty(string()),
-    commentOwner: nonempty(array()),
-    parentForum: nonempty(array()),
+    commentOwner: nonempty(string()),
+    parentForum: nonempty(string()),
+})
+//tag schemas\\
+const tagValStruct = object({
+    title: nonempty(string()),
+    content: nonempty(string())
 })
 
 module.exports = {
     regisUserValStruct,
     loginUserValStruct,
-    postForumValStruct,
-    postCommentValStruct
+    userValStruct,
+    forumValStruct,
+    commentValStruct,
+    tagValStruct
 }
 
