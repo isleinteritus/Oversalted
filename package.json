@@ -8,6 +8,8 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@casl/ability": "^5.4.3",
+    "@casl/mongoose": "^6.0.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "connect-redis": "^6.0.0",

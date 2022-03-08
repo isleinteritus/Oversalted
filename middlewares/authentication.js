@@ -10,20 +10,6 @@ const loggedInCheck = (req, res, next) => {
     next()
 }
 
-const ROLE = {
-    admin: 'admin',
-    moderator: 'mod',
-    user: 'user'
-}
-const roleCheck ={
-
-}
-
-//permissions
-const canAlter = () => {
-
-}
-
 
 module.exports = {
     loggedInCheck,
