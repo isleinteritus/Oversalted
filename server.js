@@ -34,7 +34,7 @@ db.on('disconnected', ()=> console.log('Your mongod has disconnected'))
 db.on('open', ()=>{})
 
 // middleware \\
-app.use(helmet())
+app.use(helmet()) //TODO expand on the defaults that helmetjs adds.
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))

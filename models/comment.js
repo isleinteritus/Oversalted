@@ -10,12 +10,12 @@ const commentSchema = new mongoose.Schema(
         },
         commentOwner: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
+            ref: 'User'
            },
         parentForum: [
             {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Forum"
+            ref: 'Forum'
             }
         ],
         createdOn: {
