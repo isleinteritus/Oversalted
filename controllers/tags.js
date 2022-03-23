@@ -5,11 +5,11 @@ const Tag = require('../models/tag.js')
 const Forum = require('../models/forum.js')
 const { tagValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
-const { loggedInCheck } = require('../middlewares/authentication.js')
+const { loggedIn } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', /*loggedInCheck, isAdmin,*/ (req, res) => {
+router.post ('/create', /*loggedIn, isAdmin,*/ (req, res) => {
         //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -58,7 +58,7 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 //tag id
-router.put('/:id', /*loggedInCheck, isAdmin,*/(req, res) => {
+router.put('/:id', /*loggedIn, isAdmin,*/(req, res) => {
     //Authorize logic
     //validate information
     //layer 1 superstruct
@@ -83,7 +83,7 @@ router.put('/:id', /*loggedInCheck, isAdmin,*/(req, res) => {
     }
 })
 //potential edge cases of having one tag only in the forum. All forums require >=1 tag
-router.delete('/:id', /*loggedInCheck, isAdmin,*/ (req, res) => {
+router.delete('/:id', /*loggedIn, isAdmin,*/ (req, res) => {
     Tag.findByIdAndDelete(
         req.params.id, 
         (error, deletedTag) => {
