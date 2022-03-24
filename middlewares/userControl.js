@@ -1,4 +1,9 @@
 const { defineAbility, defineAbilityFor, AbilityBuilder, Ability } = require("@casl/ability")
+//TODO for user control access
+//Figure out where to put the access control for users and anon users.
+//Answer: sessions
+//Where does the session go to access unknown users? As for known users add it too the login.
+//TODO2: controller logic. How to fit this all together to connect? Does it connect through the usage of the mongoose plugin in server.js?
 
 /* User control theory
 user actions
