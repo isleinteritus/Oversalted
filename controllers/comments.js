@@ -5,11 +5,11 @@ const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
 const { commentValStruct } = require('../middlewares/validation.js')
 const { validate, StructError } = require('superstruct')
-const { loggedInCheck } = require('../middlewares/authentication.js')
+const { loggedIn } = require('../middlewares/authentication.js')
 
 //ROUTES
 ///////CREATE///////
-router.post ('/create', loggedInCheck, (req, res) => {
+router.post ('/create', loggedIn, (req, res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -64,7 +64,7 @@ router.get('/:id', (req, res)=> {
 
 //UPDATE
 //comment id
-router.put('/:id', loggedInCheck, (req, res) => {
+router.put('/:id', loggedIn, (req, res) => {
     //Authorize logic
         //validate information
         //layer 1 superstruct
@@ -92,7 +92,7 @@ router.put('/:id', loggedInCheck, (req, res) => {
 
 //DELETE
 //comment id
-router.delete('/:id', loggedInCheck, (req,res) => {
+router.delete('/:id', loggedIn, (req,res) => {
     Comment.findByIdAndDelete(
         req.params.id, 
         (error, deletedComment) => {

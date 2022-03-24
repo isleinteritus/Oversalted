@@ -3,10 +3,11 @@ const router = express.Router()
 const User = require('../models/user.js')
 const Forum = require('../models/forum.js')
 const Comment = require('../models/comment.js')
-const { loggedInCheck } = require('../middlewares/authentication.js')
+const { loggedIn } = require('../middlewares/authentication.js')
 const { regisUserValStruct, loginUserValStruct, userValStruct } = require('../middlewares/validation.js')
 const { assert, validate, coerce, create, StructError} = require('superstruct')
 const { nanoid } = require('nanoid')
+const { defineRulesFor } = require('../middlewares/userControl.js')
 
 //ROUTES
 ///////CREATE USER///////
@@ -52,8 +53,10 @@ const [error, userInfo] = validate(req.body, loginUserValStruct)
                             console.error(error)
                         }
                     })
-
+                //creates a login key to register to the user as a layer of identity protection from the user and the session. This key is destroyed on logout.
                 req.session.logInKey = keyGen
+                //defines the rules on login for the user to access on login.
+                req.session.rules = defineRulesFor(user)
                 res.json(foundUser)
             }
         })
@@ -120,7 +123,7 @@ router.get('/:id', (req, res) => {
 
 //UPDATE
 //user id
-router.put('/:id', loggedInCheck, (req, res) => {
+router.put('/:id', loggedIn, (req, res) => {
     //Authorize logic
             //validate information
             //layer 1 superstruct
@@ -149,7 +152,7 @@ router.put('/:id', loggedInCheck, (req, res) => {
 
 //DELETE
 //user ID
-router.delete('/:id', loggedInCheck, (req, res) => {
+router.delete('/:id', loggedIn, (req, res) => {
 //TODO validation for that this is the user asking to delete requested user
             User.findByIdAndRemove(
                 req.params.id,
