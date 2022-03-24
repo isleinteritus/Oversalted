@@ -14,6 +14,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const redSession = require('./middlewares/session.js')
 const helmet = require("helmet")
+const {accessibleRecordsPlugin} = require('@casl/mongoose')
 
 // controller assignment \\
 const usersController = require('./controllers/users.js')
@@ -21,6 +22,8 @@ const tagsController = require('./controllers/tags.js')
 const forumsController = require('./controllers/forums.js')
 const commentsController = require('./controllers/comments.js')
 
+//plugin to use casl with mongoose
+mongoose.plugin(accessibleRecordsPlugin)
 mongoose.connect(
     config.MONGODB_URI, config.MONGODB_OPTIONS
 )
