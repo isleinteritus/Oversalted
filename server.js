@@ -24,6 +24,7 @@ const commentsController = require('./controllers/comments.js')
 
 //plugin to use casl with mongoose
 mongoose.plugin(accessibleRecordsPlugin)
+
 mongoose.connect(
     config.MONGODB_URI, config.MONGODB_OPTIONS
 )

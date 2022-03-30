@@ -19,7 +19,6 @@ router.post('/register', (req, res) => {
        console.error(error)
        res.json(error)
    } else {
-
         User.create(
             userVal
         , (error, createdUser) =>{
@@ -30,7 +29,8 @@ router.post('/register', (req, res) => {
                 }
         })
     }
-    //TODO before adding user to database, user needs to confirm idenity through email validation link. Maybe have limited access? schema for user: is validated or not? Hmn.
+   //TODO before adding user to database, user needs to confirm idenity through email validation link.
+    //Maybe have limited access? schema for user: is validated or not? Hmn.
 })
 
 router.post('/login', (req, res) => {
@@ -63,7 +63,6 @@ const [error, userInfo] = validate(req.body, loginUserValStruct)
     }
 })
 
-//PLACEHOLDER:TODO test route and add extra data. 
 router.post('/logout', (req, res) => {
     const user = req.body
     User.findOne(
