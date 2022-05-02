@@ -1,7 +1,8 @@
-#Documentation
+# Documentation
+
 ***
 
-#TODO:
+# TODO:
 - add hashing of passwords with argon. Remove becrypt
 - finalize role base system within the userControl file, casl.
 - security checks
@@ -23,15 +24,15 @@
 - potential issue that needs to be tested with the tag system. All forums will require one tag. If for some reason a 
   tag is deleted fromthe system then what will happen to forums that are using that tag?
 - look into better management of the tag system. Only particular people should have access to creating, and deleting a tag(which should never happen).
-- 
-###Technology used
+ 
+### Technology used
 - server: express / Nodejs
 - Database: Mongodb
 - Session database: redis
 
 ***
 
-###Endpoints system
+### Endpoints system
 Routes [endpoints] within server.js:
 - app.use('/user', users)
 - app.use('/forum', forums)
@@ -39,19 +40,20 @@ Routes [endpoints] within server.js:
 - app.use('/tag', tags)
 
 ***
-###Model relationship mapping
+
+### Model relationship mapping
 - users references: forum, comment
 - comments references: user, forum
 - forums references: user, comment, tag
 - tags: references forum
 
-###indentification of the user using nanoid
+### indentification of the user using nanoid
 In a way of obscuring the data of the user in the database from the session ID there is a unique key generator that 
 generates a new user ID sequence and uses that as an the ID for the user. This temporary ID is applied to the session and the databse but it is then deleted when the user logs out. A new key is generated each time the user 
 logs in. However the downside to this is that it is difficult to track the user/debug a specific problem. The best, 
 so far, is using a logger to track the connections made. This unique key is simply called logInKey.
 
-###validation
+### validation
 Aside from seeking validation from our peers the program currently functions under a two layer validation system 
 when connecting with the database. Superstruct(l1) and mongoose(l2).
 
@@ -60,7 +62,7 @@ middleware/validation.js.
 
 The second layer is found in our routes that connect with the database. The second layer is the mongoose system.
 
-###authentication
+### authentication
 TODO in the works.
 The theory is that the authetnication system is working with the userControl system. The userControl system defines 
 the role of the user and what that user can and cannot do. Whether they are a anon, user, mod, or admin. These 
@@ -68,12 +70,12 @@ predefined roles are applied to sessions. THe authethentication system would ide
 priviliges and allow them through on the specific routes. Like anon not being able to create a forum yet anon can 
 read a forum.
 
-###remarks
+### remarks
 - crud methology
 
 
-###config/env notes
-- config.js is the file for ALL configuration. 
+### config/env notes
+- config.js is the file for ALL configuration within the config. 
 - for sensitive data use the .env, which most of the config.js uses .env. The general layout of the .env follows 
 
 >//DATABASE CONNECTIONS\\  
