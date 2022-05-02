@@ -1,7 +1,5 @@
 # Documentation
 
-***
-
 # TODO:
 - add hashing of passwords with argon. Remove becrypt
 - finalize role base system within the userControl file, casl.
